@@ -29,6 +29,7 @@ public class GUI implements InventoryHolder {
         ItemMeta emptyMeta = empty.getItemMeta();
 
         emptyMeta.setDisplayName(" ");
+        emptyMeta.setHideTooltip(true);
 
         empty.setItemMeta(emptyMeta);
 

@@ -34,7 +34,7 @@ public class SetupGUI extends GUI {
 
         spawnMeta.setDisplayName(NewConfig.getString("setup.spawn.name"));
 
-        spawnMeta.setLore(List.of(NewConfig.getStringCompiled("setup.spawn.lore")));
+        spawnMeta.setLore(NewConfig.getStringList("setup.spawn.lore"));
 
         spawnItem.setItemMeta(spawnMeta);
 
@@ -45,7 +45,7 @@ public class SetupGUI extends GUI {
 
         saveMeta.setDisplayName(NewConfig.getString("setup.save.name"));
 
-        saveMeta.setLore(List.of(NewConfig.getStringCompiled("setup.save.lore")));
+        saveMeta.setLore(NewConfig.getStringList("setup.save.lore"));
 
         saveItem.setItemMeta(saveMeta);
 

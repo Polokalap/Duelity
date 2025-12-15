@@ -34,4 +34,10 @@ public class Sound {
 
     }
 
+    public static void Drink(Player player, Boolean negative) {
+
+        player.playSound(player, org.bukkit.Sound.ENTITY_GENERIC_DRINK, 0.5f, negative ? 0.9f : 1.0f);
+
+    }
+
 }

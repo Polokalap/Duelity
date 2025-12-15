@@ -23,7 +23,7 @@ public class KitsManagerGUI extends GUI {
 
         addMeta.setDisplayName(NewConfig.getString("kits.add.name"));
 
-        addMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add.lore")));
+        addMeta.setLore(NewConfig.getStringList("kits.add.lore"));
 
         addKit.setItemMeta(addMeta);
 
@@ -36,7 +36,7 @@ public class KitsManagerGUI extends GUI {
 
             noKitsMeta.setDisplayName(NewConfig.getString("kits.no_kits.name"));
 
-            noKitsMeta.setLore(List.of(NewConfig.getStringCompiled("kits.no_kits.lore")));
+            noKitsMeta.setLore(NewConfig.getStringList("kits.no_kits.lore"));
 
             noKits.setItemMeta(noKitsMeta);
 

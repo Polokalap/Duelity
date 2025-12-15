@@ -3,6 +3,9 @@ package mel.Polokalap.duelity.Utils;
 import mel.Polokalap.duelity.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NewConfig {
 
     private static Main plugin = Main.getInstance();
@@ -28,6 +31,23 @@ public class NewConfig {
         }
 
         return compiled.replaceAll("ßprefix", getString("PREFIX"));
+
+    }
+
+    public static List<String> getStringList(String string) {
+
+        List<String> stringList = new ArrayList<>();
+
+        for (String line : config.getStringList(string)) {
+
+            stringList.add(line
+                    .replaceAll("&", "§")
+                    .replaceAll("ßprefix", getString("PREFIX")
+            ));
+
+        }
+
+        return stringList;
 
     }
 

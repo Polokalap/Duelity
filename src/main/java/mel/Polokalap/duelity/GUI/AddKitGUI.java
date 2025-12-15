@@ -1,8 +1,8 @@
 package mel.Polokalap.duelity.GUI;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import mel.Polokalap.duelity.Listeners.GUIListener;
-import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,12 +20,7 @@ public class AddKitGUI extends GUI {
     public void openGUI(Player player) {
 
         name = NewConfig.getString("kits.add_gui.name");
-        if (
-                GUIListener.tempName.get(player) != null &&
-                        GUIListener.tempIcon.get(player) != null &&
-                        GUIListener.tempKit.get(player) != null
-        ) size = 36;
-        else size = 27;
+        size = 27;
 
         super.openGUI(player);
 
@@ -36,7 +31,7 @@ public class AddKitGUI extends GUI {
 
         if (GUIListener.tempName.get(player) != null)
             nameMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_name.set_lore").replaceAll("ẞname", GUIListener.tempName.get(player))));
-        else nameMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_name.lore")));
+        else nameMeta.setLore(NewConfig.getStringList("kits.add_gui.set_name.lore"));
 
         nameItem.setItemMeta(nameMeta);
 
@@ -51,7 +46,7 @@ public class AddKitGUI extends GUI {
 
         iconMeta.setDisplayName(NewConfig.getString("kits.add_gui.set_icon.name"));
 
-        iconMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_icon.lore")));
+        iconMeta.setLore(NewConfig.getStringList("kits.add_gui.set_icon.lore"));
 
         iconItem.setItemMeta(iconMeta);
 
@@ -63,7 +58,7 @@ public class AddKitGUI extends GUI {
 
         kitMeta.setDisplayName(NewConfig.getString("kits.add_gui.set_inventory.name"));
 
-        kitMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_inventory.lore")));
+        kitMeta.setLore(NewConfig.getStringList("kits.add_gui.set_inventory.lore"));
 
         kitItem.setItemMeta(kitMeta);
 
@@ -75,22 +70,21 @@ public class AddKitGUI extends GUI {
                 GUIListener.tempKit.get(player) != null
         ) {
 
-            UUID ArrowUUID = UUID.fromString("523f3491-5336-48e6-98b2-b5e1593b9423");
-
             ItemStack nextPageItem = new ItemStack(Material.PLAYER_HEAD);
 
             SkullMeta nextPageMeta = (SkullMeta) nextPageItem.getItemMeta();
 
-            PlayerProfile profile = Bukkit.createProfile(ArrowUUID);
+            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+            profile.setProperty(new ProfileProperty("textures", config.getString("kits.add_gui.next.arrow.skin")));
             nextPageMeta.setPlayerProfile(profile);
 
             nextPageMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.arrow.name"));
 
-            nextPageMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.next.arrow.lore")));
+            nextPageMeta.setLore(NewConfig.getStringList("kits.add_gui.next.arrow.lore"));
 
             nextPageItem.setItemMeta(nextPageMeta);
 
-            menu.setItem(35, nextPageItem);
+            menu.setItem(26, nextPageItem);
 
         }
 

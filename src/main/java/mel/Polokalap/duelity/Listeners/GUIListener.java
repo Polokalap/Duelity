@@ -1,6 +1,7 @@
 package mel.Polokalap.duelity.Listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import mel.Polokalap.duelity.GUI.AddKitAttributesGUI;
 import mel.Polokalap.duelity.GUI.AddKitGUI;
 import mel.Polokalap.duelity.GUI.GUI;
 import mel.Polokalap.duelity.GUI.SetupGUI;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class GUIListener implements Listener {
     public static HashMap<Player, String> tempName = new HashMap<>();
     public static HashMap<Player, Material> tempIcon = new HashMap<>();
     public static HashMap<Player, ArrayList<ItemStack>> tempKit = new HashMap<>();
+
+    public static HashMap<Player, Integer> tempHp = new HashMap<>();
+    public static HashMap<Player, Gamemodes> tempGamemode = new HashMap<>();
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -190,15 +195,75 @@ public class GUIListener implements Listener {
                     @Override
                     public void run() {
 
-                        if (!addingKitIcon.contains(player)) cancel();
+                        if (!addingKit.contains(player)) cancel();
 
                         player.sendActionBar("§a" + NewConfig.getString("kits.add_gui.set_inventory.action_bar"));
 
-                        if (!addingKitIcon.contains(player)) player.sendActionBar(" ");
+                        if (!addingKit.contains(player)) player.sendActionBar(" ");
 
                     }
 
                 }.runTaskTimer(plugin, 0L, 40L);
+
+            }
+
+            if (name.equals(NewConfig.getString("kits.add_gui.next.arrow.name"))) {
+
+                tempHp.put(player, 20);
+                tempGamemode.put(player, Gamemodes.SURVIVAL);
+                new AddKitAttributesGUI().openGUI(player);
+
+            }
+
+            if (name.equals(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(GUIListener.tempHp.get(player))))) {
+
+                if (event.isRightClick()) {
+
+                    if (tempHp.get(player) <= 1 || event.isShiftClick() && tempHp.get(player) <= 10) {
+
+                        player.sendMessage(NewConfig.getString("kits.add_gui.next.health.max"));
+                        Sound.Error(player);
+                        return;
+
+                    }
+
+                    if (event.isShiftClick()) tempHp.put(player, tempHp.get(player) - 10);
+                    else tempHp.put(player, tempHp.get(player) - 1);
+                    Sound.Drink(player, true);
+
+                } else if (event.isLeftClick()) {
+
+                    if (event.isShiftClick()) tempHp.put(player, tempHp.get(player) + 10);
+                    else tempHp.put(player, tempHp.get(player) + 1);
+                    Sound.Drink(player, false);
+
+                }
+
+                String itemName = NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(GUIListener.tempHp.get(player)));
+
+                ItemMeta itemMeta = item.getItemMeta();
+
+                itemMeta.setDisplayName(itemName);
+
+                item.setItemMeta(itemMeta);
+
+            }
+
+            if (name.equals(NewConfig.getString("kits.add_gui.next.gamemode.name"))) {
+
+                Sound.Click(player);
+
+                if (tempGamemode.get(player) == Gamemodes.SURVIVAL) tempGamemode.put(player, Gamemodes.ADVENTURE);
+                else tempGamemode.put(player, Gamemodes.SURVIVAL);
+
+                ItemMeta itemMeta = item.getItemMeta();
+
+                itemMeta.setLore(List.of(
+                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", GUIListener.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", GUIListener.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                ));
+
+                item.setItemMeta(itemMeta);
 
             }
 
@@ -316,7 +381,7 @@ public class GUIListener implements Listener {
 
             if (message.equals("done")) {
 
-                addingKitIcon.remove(player);
+                addingKit.remove(player);
                 muteChat.remove(player);
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
@@ -338,7 +403,7 @@ public class GUIListener implements Listener {
             }
 
             Sound.Error(player);
-            player.sendActionBar("§c" + NewConfig.getString("kits.add_gui.set_icon.action_bar"));
+            player.sendActionBar("§c" + NewConfig.getString("kits.add_gui.set_inventory.action_bar"));
 
         }
 
