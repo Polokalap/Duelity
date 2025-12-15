@@ -1,0 +1,17 @@
+name: Duelity
+version: '1.0'
+main: mel.Polokalap.duelity.Main
+api-version: '1.21'
+prefix: :3
+authors: [ Polokalap ]
+website: autizm.us/m, ko-fi.com/Polokalap
+description: "A simple duel plugin"
+commands:
+  "#setup":
+    description: "Setup for Duelity"
+  "#kits":
+    description: "Manage kits for Duelity"
+permissions:
+  duelity.admin:
+    default: op
+    description: "This permission gives access to the Duelity config and setup."

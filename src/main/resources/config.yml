@@ -1,0 +1,80 @@
+PREFIX: "&x&F&F&8&3&F&7&lD&x&F&F&8&2&E&2&lu&x&F&F&8&0&C&D&le&x&F&F&7&F&B&9&ll&x&F&F&7&D&A&4&li&x&F&F&7&C&8&F&lt&x&F&F&7&A&7&A&ly &f&l»&r&f"
+
+console:
+  startup: "Duelity plugin started!"
+  shutdown: "Duelity plugin disabled!"
+  player: "You *MUST* be a player to run this command!"
+
+settings:
+  setup: false
+  duel_server: true
+
+player:
+  y: "&aYes"
+  n: "&cNo"
+  permission: "&cYou do &lNOT &r&chave permission to run that command!"
+  args: "&cMissing arguments!"
+
+admin:
+  setup_incomplete:
+    - "&c------------------------------------"
+    - "&fYour &lDuelity &r&fsetup is incomplete!"
+    - "&fDo /#setup start to set up the plugin!"
+    - "&c------------------------------------"
+
+setup:
+  name: "&aSetup Duelity"
+  duel:
+    name: "&aIs this a duel server?"
+    lore:
+      - "&fCurrently: ẞanswer"
+  spawn:
+    name: "&aSet spawn"
+    close: "ßprefix Go to the spawn location, then type \"done\" in chat"
+    action_bar: "Type \"done\" when you are done!"
+    lore:
+      - "&fClick here to set the spawn location"
+  save:
+    name: "&aComplete setup"
+    done: "ßprefix Config saved! Remember: You can always edit it using &6/#setup start &for via the &6config.yml &ffile!"
+    lore:
+      - "&fClick here to save the config!"
+
+kits:
+  name: "&aManage kits"
+  add:
+    name: "&aAdd kit"
+    lore:
+      - "&fClick here to add a kit!"
+  no_kits:
+    name: "&4There are no kits on the server!"
+    lore:
+      - "&cAdd a kit using the &f\"&aAdd a kit&f\" &citem."
+  add_gui:
+    name: "&aAdd a kit"
+    set_name:
+      name: "&aSet a name for your kit"
+      gui:
+        name: "&aSet kit name"
+        exists: "&cA kit with this name already exists!"
+        action_bar: "&aType the kit's name in chat!"
+      lore:
+        - "&fClick here to set a name for your kit"
+      set_lore:
+        - "&fCurrent name: ẞname"
+    set_icon:
+      name: "&aSet an icon for your kit"
+      action_bar: "Hold the item and type \"done\"!"
+      lore:
+        - "&fClick here to set the icon of the kit"
+    set_inventory:
+      name: "&aSet the inventory"
+      action_bar: "Prepare your inventory and type \"done\"!"
+      lore:
+        - "&fClick here to set the inventory"
+    next:
+      name: "&aSet kit attributes"
+      arrow:
+        name: "&aNext page"
+        lore:
+          - "&fClick here to go to the attributes page"
