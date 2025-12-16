@@ -2,8 +2,8 @@ package mel.Polokalap.duelity.GUI;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import mel.Polokalap.duelity.Listeners.GUIListener;
 import mel.Polokalap.duelity.Utils.NewConfig;
+import mel.Polokalap.duelity.Utils.PlayerCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,8 +29,8 @@ public class AddKitGUI extends GUI {
 
         nameMeta.setDisplayName(NewConfig.getString("kits.add_gui.set_name.name"));
 
-        if (GUIListener.tempName.get(player) != null)
-            nameMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_name.set_lore").replaceAll("ẞname", GUIListener.tempName.get(player))));
+        if (PlayerCache.tempName.get(player) != null)
+            nameMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.set_name.set_lore").replaceAll("ẞname", PlayerCache.tempName.get(player))));
         else nameMeta.setLore(NewConfig.getStringList("kits.add_gui.set_name.lore"));
 
         nameItem.setItemMeta(nameMeta);
@@ -39,7 +39,7 @@ public class AddKitGUI extends GUI {
 
         ItemStack iconItem;
 
-        if (GUIListener.tempIcon.get(player) != null && GUIListener.tempIcon.get(player) != Material.AIR) iconItem = new ItemStack(GUIListener.tempIcon.get(player));
+        if (PlayerCache.tempIcon.get(player) != null && PlayerCache.tempIcon.get(player) != Material.AIR) iconItem = new ItemStack(PlayerCache.tempIcon.get(player));
         else iconItem = new ItemStack(Material.DIAMOND_SWORD);
 
         ItemMeta iconMeta = iconItem.getItemMeta();
@@ -65,9 +65,9 @@ public class AddKitGUI extends GUI {
         menu.setItem(16, kitItem);
 
         if (
-                GUIListener.tempName.get(player) != null &&
-                GUIListener.tempIcon.get(player) != null &&
-                GUIListener.tempKit.get(player) != null
+                PlayerCache.tempName.get(player) != null &&
+                PlayerCache.tempIcon.get(player) != null &&
+                PlayerCache.tempKit.get(player) != null
         ) {
 
             ItemStack nextPageItem = new ItemStack(Material.PLAYER_HEAD);

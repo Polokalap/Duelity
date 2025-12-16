@@ -16,6 +16,7 @@ public class GUI implements InventoryHolder {
     Main plugin = Main.getInstance();
     FileConfiguration config = plugin.getConfig();
     FileConfiguration kits = plugin.getKitConfig();
+    FileConfiguration arenas = plugin.getArenaConfig();
 
     int size;
     String name;

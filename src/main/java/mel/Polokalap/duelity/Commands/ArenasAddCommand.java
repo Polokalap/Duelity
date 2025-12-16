@@ -1,9 +1,10 @@
 package mel.Polokalap.duelity.Commands;
 
-import mel.Polokalap.duelity.GUI.KitsManagerGUI;
+import mel.Polokalap.duelity.GUI.ArenaManagerGUI;
 import mel.Polokalap.duelity.Utils.NewConfig;
-import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
+import mel.Polokalap.duelity.Utils.WorldEdit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class KitsCommand implements CommandExecutor, TabCompleter {
+public class ArenasAddCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
@@ -34,13 +35,12 @@ public class KitsCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        new KitsManagerGUI().openGUI(player);
+        if (args.length == 0) {
 
-        PlayerCache.tempName.remove(player);
-        PlayerCache.tempIcon.remove(player);
-        PlayerCache.tempKit.remove(player);
-        PlayerCache.tempHp.remove(player);
-        PlayerCache.tempGamemode.remove(player);
+            new ArenaManagerGUI().openGUI(player);
+            return true;
+
+        }
 
         return true;
 
@@ -49,7 +49,17 @@ public class KitsCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
 
-        return List.of();
+        if (!sender.hasPermission("duelity.admin")) return List.of();
+
+        switch (args.length) {
+
+            case 1:
+                return List.of("save", "place");
+
+            default:
+                return List.of();
+
+        }
 
     }
 

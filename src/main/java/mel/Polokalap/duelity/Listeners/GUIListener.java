@@ -9,7 +9,6 @@ import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class GUIListener implements Listener {
@@ -36,18 +34,11 @@ public class GUIListener implements Listener {
     private long now = System.currentTimeMillis();
     private int delay = 250;
 
-    private ArrayList<Player> muteChat = new ArrayList<>();
+    public static ArrayList<Player> muteChat = new ArrayList<>();
     private ArrayList<Player> settingSpawn = new ArrayList<>();
     private ArrayList<Player> addingKit = new ArrayList<>();
     private ArrayList<Player> addingKitName = new ArrayList<>();
     private ArrayList<Player> addingKitIcon = new ArrayList<>();
-
-    public static HashMap<Player, String> tempName = new HashMap<>();
-    public static HashMap<Player, Material> tempIcon = new HashMap<>();
-    public static HashMap<Player, ArrayList<ItemStack>> tempKit = new HashMap<>();
-
-    public static HashMap<Player, Integer> tempHp = new HashMap<>();
-    public static HashMap<Player, Gamemodes> tempGamemode = new HashMap<>();
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -209,17 +200,17 @@ public class GUIListener implements Listener {
 
             if (name.equals(NewConfig.getString("kits.add_gui.next.arrow.name"))) {
 
-                tempHp.put(player, 20);
-                tempGamemode.put(player, Gamemodes.SURVIVAL);
+                PlayerCache.tempHp.put(player, 20);
+                PlayerCache.tempGamemode.put(player, Gamemodes.SURVIVAL);
                 new AddKitAttributesGUI().openGUI(player);
 
             }
 
-            if (name.equals(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(GUIListener.tempHp.get(player))))) {
+            if (name.equals(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player))))) {
 
                 if (event.isRightClick()) {
 
-                    if (tempHp.get(player) <= 1 || event.isShiftClick() && tempHp.get(player) <= 10) {
+                    if (PlayerCache.tempHp.get(player) <= 1 || event.isShiftClick() && PlayerCache.tempHp.get(player) <= 10) {
 
                         player.sendMessage(NewConfig.getString("kits.add_gui.next.health.max"));
                         Sound.Error(player);
@@ -227,19 +218,19 @@ public class GUIListener implements Listener {
 
                     }
 
-                    if (event.isShiftClick()) tempHp.put(player, tempHp.get(player) - 10);
-                    else tempHp.put(player, tempHp.get(player) - 1);
+                    if (event.isShiftClick()) PlayerCache.tempHp.put(player, PlayerCache.tempHp.get(player) - 10);
+                    else PlayerCache.tempHp.put(player, PlayerCache.tempHp.get(player) - 1);
                     Sound.Drink(player, true);
 
                 } else if (event.isLeftClick()) {
 
-                    if (event.isShiftClick()) tempHp.put(player, tempHp.get(player) + 10);
-                    else tempHp.put(player, tempHp.get(player) + 1);
+                    if (event.isShiftClick()) PlayerCache.tempHp.put(player, PlayerCache.tempHp.get(player) + 10);
+                    else PlayerCache.tempHp.put(player, PlayerCache.tempHp.get(player) + 1);
                     Sound.Drink(player, false);
 
                 }
 
-                String itemName = NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(GUIListener.tempHp.get(player)));
+                String itemName = NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player)));
 
                 ItemMeta itemMeta = item.getItemMeta();
 
@@ -253,14 +244,14 @@ public class GUIListener implements Listener {
 
                 Sound.Click(player);
 
-                if (tempGamemode.get(player) == Gamemodes.SURVIVAL) tempGamemode.put(player, Gamemodes.ADVENTURE);
-                else tempGamemode.put(player, Gamemodes.SURVIVAL);
+                if (PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL) PlayerCache.tempGamemode.put(player, Gamemodes.ADVENTURE);
+                else PlayerCache.tempGamemode.put(player, Gamemodes.SURVIVAL);
 
                 ItemMeta itemMeta = item.getItemMeta();
 
                 itemMeta.setLore(List.of(
-                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", GUIListener.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
-                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", GUIListener.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
                 ));
 
                 item.setItemMeta(itemMeta);
@@ -335,7 +326,7 @@ public class GUIListener implements Listener {
             addingKitName.remove(player);
             muteChat.remove(player);
 
-            tempName.put(player, message);
+            PlayerCache.tempName.put(player, message);
 
             Bukkit.getScheduler().runTask(plugin, () -> {
 
@@ -360,7 +351,7 @@ public class GUIListener implements Listener {
 
                     player.sendActionBar(" ");
 
-                    tempIcon.put(player, player.getInventory().getItemInMainHand().getType());
+                    PlayerCache.tempIcon.put(player, player.getInventory().getItemInMainHand().getType());
 
                     new AddKitGUI().openGUI(player);
 
@@ -392,7 +383,7 @@ public class GUIListener implements Listener {
 
                     items.addAll(Arrays.asList(player.getInventory().getContents()));
 
-                    tempKit.put(player, items);
+                    PlayerCache.tempKit.put(player, items);
 
                     new AddKitGUI().openGUI(player);
 

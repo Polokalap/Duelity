@@ -11,6 +11,9 @@ commands:
     description: "Setup for Duelity"
   "#kits":
     description: "Manage kits for Duelity"
+  "#arenas":
+    description: "Manage arenas for Duelity"
+  "#wetest":
 permissions:
   duelity.admin:
     default: op

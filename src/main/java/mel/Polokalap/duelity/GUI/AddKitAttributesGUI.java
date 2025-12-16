@@ -3,6 +3,7 @@ package mel.Polokalap.duelity.GUI;
 import mel.Polokalap.duelity.Listeners.GUIListener;
 import mel.Polokalap.duelity.Utils.Gamemodes;
 import mel.Polokalap.duelity.Utils.NewConfig;
+import mel.Polokalap.duelity.Utils.PlayerCache;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class AddKitAttributesGUI extends GUI {
 
         healthMeta.setColor(Color.fromRGB(230, 10, 10));
 
-        healthMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(GUIListener.tempHp.get(player))));
+        healthMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player))));
 
         healthMeta.setLore(NewConfig.getStringList("kits.add_gui.next.health.lore"));
 
@@ -41,8 +42,8 @@ public class AddKitAttributesGUI extends GUI {
         gamemodeMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.gamemode.name"));
 
         gamemodeMeta.setLore(List.of(
-                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", GUIListener.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
-                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", GUIListener.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
         ));
 
         gamemodeItem.setItemMeta(gamemodeMeta);
@@ -62,9 +63,9 @@ public class AddKitAttributesGUI extends GUI {
         menu.setItem(16, mapItem);
 
 //        if (
-//                GUIListener.tempName.get(player) != null &&
-//                GUIListener.tempIcon.get(player) != null &&
-//                GUIListener.tempKit.get(player) != null
+//                PlayerCache.tempName.get(player) != null &&
+//                PlayerCache.tempIcon.get(player) != null &&
+//                PlayerCache.tempKit.get(player) != null
 //        ) {
 //
 //            ItemStack nextPageItem = new ItemStack(Material.PLAYER_HEAD);
