@@ -2,11 +2,14 @@ package mel.Polokalap.duelity;
 
 import mel.Polokalap.duelity.Commands.*;
 import mel.Polokalap.duelity.Listeners.*;
+import mel.Polokalap.duelity.Managers.AddArenaManager;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.WorldUtil;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -42,6 +45,16 @@ public final class Main extends JavaPlugin {
         kitConfig = YamlConfiguration.loadConfiguration(kit);
         arenaConfig = YamlConfiguration.loadConfiguration(arena);
 
+        ConfigurationSection arenas = getArenaConfig().getConfigurationSection("arenas");
+
+        for (String arenaId : arenas.getKeys(false)) {
+
+            ConfigurationSection arena = arenas.getConfigurationSection(arenaId);
+            PlayerCache.arenaNames.clear();
+            PlayerCache.arenaNames.add(arena.getString("name"));
+
+        }
+
         register_stuff();
 
         getLogger().info(getConfig().getString("console.startup"));
@@ -58,17 +71,20 @@ public final class Main extends JavaPlugin {
         getCommand("#kits").setExecutor(new KitsCommand());
         getCommand("#wetest").setExecutor(new WorldEditTestCommand());
         getCommand("#arenas").setExecutor(new ArenasAddCommand());
+        getCommand("leave").setExecutor(new LeaveCommand());
 
         // Listener: getServer().getPluginManager().registerEvents(new Class(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaGUIListener(), this);
+        getServer().getPluginManager().registerEvents(new AddArenaListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
         getCommand("#setup").setTabCompleter(new SetupCommand());
         getCommand("#kits").setTabCompleter(new KitsCommand());
         getCommand("#wetest").setTabCompleter(new WorldEditTestCommand());
         getCommand("#arenas").setTabCompleter(new ArenasAddCommand());
+        getCommand("leave").setTabCompleter(new LeaveCommand());
 
     }
 
@@ -80,6 +96,12 @@ public final class Main extends JavaPlugin {
         for (World world : PlayerCache.worlds) {
 
             WorldUtil.deleteWorldByWorld(world);
+
+        }
+
+        for (Player player : PlayerCache.editingArena) {
+
+            AddArenaManager.leave(player);
 
         }
 

@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GUIListener implements Listener {
@@ -31,7 +32,7 @@ public class GUIListener implements Listener {
     private static FileConfiguration config = plugin.getConfig();
     private static FileConfiguration kits = plugin.getKitConfig();
 
-    private long now = System.currentTimeMillis();
+    private HashMap<Player, Long> now = new HashMap<>();
     private int delay = 250;
 
     public static ArrayList<Player> muteChat = new ArrayList<>();
@@ -69,9 +70,11 @@ public class GUIListener implements Listener {
 
             event.setCancelled(true);
 
-            if (System.currentTimeMillis() - now < delay) return;
+            if (now.get(player) == null) now.put(player, System.currentTimeMillis());
 
-            now = System.currentTimeMillis();
+            if (System.currentTimeMillis() - now.get(player) < delay) return;
+
+            now.put(player, System.currentTimeMillis());
 
             if (name.equals(NewConfig.getString("setup.duel.name"))) {
 

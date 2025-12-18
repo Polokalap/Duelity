@@ -1,10 +1,7 @@
 package mel.Polokalap.duelity.Listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import mel.Polokalap.duelity.GUI.AddKitAttributesGUI;
-import mel.Polokalap.duelity.GUI.AddKitGUI;
-import mel.Polokalap.duelity.GUI.GUI;
-import mel.Polokalap.duelity.GUI.SetupGUI;
+import mel.Polokalap.duelity.GUI.*;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Managers.AddArenaManager;
 import mel.Polokalap.duelity.Utils.Gamemodes;
@@ -13,6 +10,7 @@ import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,8 +23,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ArenaGUIListener implements Listener {
@@ -35,12 +38,13 @@ public class ArenaGUIListener implements Listener {
     private static FileConfiguration config = plugin.getConfig();
     private static FileConfiguration kits = plugin.getKitConfig();
 
-    private long now = System.currentTimeMillis();
+    private HashMap<Player, Long> now = new HashMap<>();
     private int delay = 250;
 
     private ArrayList<Player> muteChat = new ArrayList<>();
-    private ArrayList<Player> settingSpawn = new ArrayList<>();
+    private ArrayList<Player> renamingArena = new ArrayList<>();
     private ArrayList<Player> addingArena = new ArrayList<>();
+    private ArrayList<Player> settingArenaIcon = new ArrayList<>();
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -71,15 +75,162 @@ public class ArenaGUIListener implements Listener {
 
             event.setCancelled(true);
 
-            if (System.currentTimeMillis() - now < delay) return;
+            if (now.get(player) == null) now.put(player, System.currentTimeMillis());
 
-            now = System.currentTimeMillis();
+            if (System.currentTimeMillis() - now.get(player) < delay) return;
+
+            now.put(player, System.currentTimeMillis());
 
             if (name.equals(NewConfig.getString("arenas.add.name"))) {
 
                 Sound.Click(player);
 
                 AddArenaManager.join(player);
+                return;
+
+            }
+
+            if (name.equals(NewConfig.getString("arenas.edit.edit_name.name"))) {
+
+                Sound.Click(player);
+
+                renamingArena.add(player);
+                player.closeInventory();
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (!renamingArena.contains(player)) cancel();
+
+                        player.sendActionBar("§a" + NewConfig.getString("arenas.edit.edit_name.action_bar"));
+
+                        if (!renamingArena.contains(player)) player.sendActionBar(" ");
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 40L);
+
+                return;
+
+            }
+
+            if (name.equals(NewConfig.getString("arenas.edit.icon.name"))) {
+
+                Sound.Click(player);
+
+                settingArenaIcon.add(player);
+                player.closeInventory();
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (!settingArenaIcon.contains(player)) cancel();
+
+                        player.sendActionBar("§a" + NewConfig.getString("arenas.edit.icon.action_bar"));
+
+                        if (!settingArenaIcon.contains(player)) player.sendActionBar(" ");
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 40L);
+
+                return;
+
+            }
+
+            if (name.equals(NewConfig.getString("arenas.edit.delete.name"))) {
+
+                Sound.Click(player);
+
+                ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
+                if (arenas == null) return;
+
+                String targetName = PlayerCache.editArenaName.get(player);
+
+                List<Integer> ids = arenas.getKeys(false).stream()
+                        .map(Integer::parseInt)
+                        .sorted()
+                        .toList();
+
+                boolean shift = false;
+
+                for (int id : ids) {
+
+                    String key = String.valueOf(id);
+                    ConfigurationSection arena = arenas.getConfigurationSection(key);
+                    if (arena == null) continue;
+
+                    if (arena.getString("name").equals(targetName)) {
+
+                        arenas.set(key, null);
+                        shift = true;
+                        continue;
+
+                    }
+
+                    if (shift) {
+
+                        String newKey = String.valueOf(id - 1);
+
+                        ConfigurationSection target = arenas.createSection(newKey);
+
+                        for (String subKey : arena.getKeys(false)) {
+
+                            target.set(subKey, arena.get(subKey));
+
+                        }
+
+                        arenas.set(key, null);
+
+                    }
+
+                }
+
+                plugin.saveArenaConfig();
+
+                File file = new File(plugin.getDataFolder(), "Maps/" + PlayerCache.editArenaName.get(player) + ".schem");
+
+                if (file.delete()) {
+
+                    player.sendMessage(NewConfig.getString("arenas.edit.delete.deleted"));
+
+                } else {
+
+                    player.sendMessage(NewConfig.getString("arenas.edit.delete.failed_to_delete"));
+
+                }
+
+                player.closeInventory();
+
+                return;
+
+            }
+
+            if (name.equals(NewConfig.getString("arenas.edit.back.name"))) {
+
+                new ArenaManagerGUI().openGUI(player);
+
+            }
+
+            ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
+
+            for (String arenaId : arenas.getKeys(false)) {
+
+                ConfigurationSection arena = arenas.getConfigurationSection(arenaId);
+
+                if (name.replaceAll(NewConfig.getString("arenas.arena.color"), "").equals(arena.get("name"))) {
+
+                    if (!event.isRightClick()) return;
+
+                    Sound.Click(player);
+                    PlayerCache.editArenaName.put(player, name.replaceAll(NewConfig.getString("arenas.arena.color"), ""));
+                    new EditArenaGUI().openGUI(player);
+
+                }
 
             }
 
@@ -93,35 +244,127 @@ public class ArenaGUIListener implements Listener {
         Player player = event.getPlayer();
         String message = event.signedMessage().message();
 
-//        if (settingSpawn.contains(player)) {
-//
-//            event.setCancelled(true);
-//
-//            if (message.equals("done")) {
-//
-//                settingSpawn.remove(player);
-//                muteChat.remove(player);
-//
-//                Bukkit.getScheduler().runTask(plugin, () -> {
-//
-//                    Location loc = player.getLocation();
-//
-//                    player.sendActionBar(" ");
-//                    new SetupGUI().openGUI(player);
-//
-//                    config.set("settings.spawn", loc);
-//                    plugin.saveConfig();
-//
-//                });
-//
-//                return;
-//
-//            }
-//
-//            Sound.Error(player);
-//            player.sendActionBar("§c" + NewConfig.getString("setup.spawn.action_bar"));
-//
-//        }
+        if (renamingArena.contains(player)) {
+
+            event.setCancelled(true);
+
+            if (!message.isEmpty()) {
+
+                renamingArena.remove(player);
+                muteChat.remove(player);
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+
+                    player.sendActionBar(" ");
+
+                    ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
+
+                    List<Integer> ids = arenas.getKeys(false).stream()
+                            .map(Integer::parseInt)
+                            .sorted()
+                            .toList();
+
+                    String targetName = PlayerCache.editArenaName.get(player);
+
+                    for (int id : ids) {
+
+                        String key = String.valueOf(id);
+                        ConfigurationSection arena = arenas.getConfigurationSection(key);
+                        if (arena == null) continue;
+
+                        if (arena.getString("name").equals(targetName)) {
+
+                            boolean exists = false;
+
+                            for (int id1 : ids) {
+
+                                String key1 = String.valueOf(id1);
+                                ConfigurationSection arena1 = arenas.getConfigurationSection(key1);
+                                if (arena1 == null) continue;
+
+                                if (arena1.getString("name").equals(message)) exists = true;
+
+                            }
+
+                            if (exists) {
+
+                                player.sendMessage(NewConfig.getString("arenas.edit.edit_name.exists"));
+                                Sound.Error(player);
+                                return;
+
+                            }
+
+                            File from = new File(plugin.getDataFolder(), "Maps/" + PlayerCache.editArenaName.get(player) + ".schem");
+                            File to = new File(plugin.getDataFolder(), "Maps/" + message + ".schem");
+
+                            try {
+                                Files.move(Path.of(from.getPath()), Path.of(to.getPath()));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            arenas.set(key + ".name", message);
+                            PlayerCache.editArenaName.put(player, message);
+
+                            plugin.saveArenaConfig();
+
+                            new EditArenaGUI().openGUI(player);
+
+                        }
+
+                    }
+
+                });
+
+            }
+
+        }
+
+        if (settingArenaIcon.contains(player)) {
+
+            event.setCancelled(true);
+
+            if (message.equals("done")) {
+
+                settingArenaIcon.remove(player);
+                muteChat.remove(player);
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+
+                    player.sendActionBar(" ");
+
+                    ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
+
+                    List<Integer> ids = arenas.getKeys(false).stream()
+                            .map(Integer::parseInt)
+                            .sorted()
+                            .toList();
+
+                    String targetName = PlayerCache.editArenaName.get(player);
+
+                    for (int id : ids) {
+
+                        String key = String.valueOf(id);
+                        ConfigurationSection arena = arenas.getConfigurationSection(key);
+                        if (arena == null) continue;
+
+                        if (arena.getString("name").equals(targetName)) {
+
+                            arenas.set(key + ".icon", player.getInventory().getItemInMainHand().getType().toString());
+
+                        }
+
+                    }
+
+                    new EditArenaGUI().openGUI(player);
+
+                    plugin.saveArenaConfig();
+
+                });
+
+            }
+
+        }
 
     }
 

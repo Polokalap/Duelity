@@ -14,6 +14,10 @@ commands:
   "#arenas":
     description: "Manage arenas for Duelity"
   "#wetest":
+  "leave":
+    description: "Leave from... anything, really that has to do something with Duelity"
+    aliases:
+      - "l"
 permissions:
   duelity.admin:
     default: op

@@ -13,10 +13,12 @@ public class NewConfig {
 
     public static String getString(String string) {
 
-        return config.getString(string)
-                .replaceAll("&", "§")
-                .replaceAll("ßprefix", config.getString("PREFIX")
-                    .replaceAll("&", "§"));
+        String message = config.getString(string);
+        message = message.replaceAll("&", "§");
+        message = message.replaceAll("ẞprefix", config.getString("PREFIX")
+                .replaceAll("&", "§"));
+
+        return message;
 
     }
 

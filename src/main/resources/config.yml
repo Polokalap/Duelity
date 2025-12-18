@@ -14,6 +14,8 @@ player:
   n: "&cNo"
   permission: "&cYou do &lNOT &r&chave permission to run that command!"
   args: "&cMissing arguments!"
+  "on": "&7[&a✔&7]"
+  "off": "&7[&4❌&7]"
 
 admin:
   setup_incomplete:
@@ -36,7 +38,7 @@ setup:
       - "&fClick here to set the spawn location"
   save:
     name: "&aComplete setup"
-    done: "ßprefix Config saved! Remember: You can always edit it using &6/#setup start &for via the &6config.yml &ffile!"
+    done: "ẞprefix Config saved! Remember: You can always edit it using &6/#setup start &for via the &6config.yml &ffile!"
     lore:
       - "&fClick here to save the config!"
 
@@ -102,7 +104,57 @@ arenas:
     name: "&aAdd arena"
     lore:
       - "&fClick here to add an arena!"
+  arena:
+    color: "&6"
+    lore:
+      - "&fRight click to manage"
   no_arenas:
     name: "&4There are no arenas on the server!"
     lore:
       - "&cAdd an arena using the &f\"&aAdd arena&f\" &citem."
+  world:
+    check:
+      - "ẞmap &fMap"
+      - "ẞblue &fBlue spawn"
+      - "ẞred &fRed spawn"
+    save: "ẞprefix Map saved!"
+    set_name: "ẞprefix Set the name!"
+    name_exists: "ẞprefix A map with this name already exists!"
+    no_icon: "ẞprefix To set the arena's icon, please hold the item in your hand and drop it!"
+    join: "ẞprefix You are in the arena editor! Type /#arenas save <name> to save, /leave to leave!"
+    quit: "ẞprefix You left the arena editor!"
+    blue_saved: "ẞprefix Blue spawn has been saved!"
+    red_saved: "ẞprefix Red spawn has been saved!"
+    too_many: "ẞprefix Too many arenas!"
+  wand:
+    name: "&7Area wand"
+    primary:
+      - "&7[&a✔&7] Primary location selected!"
+      - "&7(X ẞx Y ẞy Z ẞz)"
+    secondary:
+      - "&7[&a✔&7] Secondary location selected!"
+      - "&7(X ẞx Y ẞy Z ẞz)"
+    lore:
+      - "&aLeft click for Primary selection"
+      - "&cRight click for Secondary selection"
+  edit:
+    name: "&aEdit ẞname"
+    delete:
+      name: "&cDelete arena"
+      lore:
+        - "&cThis step cannot be reversed!"
+      deleted: "ẞprefix Arena deleted!"
+      failed_to_delete: "ẞprefix Failed to delete arena!"
+    edit_name:
+      name: "&aEdit name"
+      exists: "ẞprefix An arena with this name already exists!"
+      lore:
+        - "&fClick here to edit the arena's name"
+      action_bar: "Type the Arena's name in the chat!"
+    back:
+      name: "&7Back"
+    icon:
+      name: "&aEdit icon"
+      lore:
+        - "&fClick here to set the icon"
+      action_bar: "Hold the item and type \"done\"!"

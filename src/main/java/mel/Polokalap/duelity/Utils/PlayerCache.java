@@ -25,6 +25,15 @@ public class PlayerCache {
     public static ArrayList<Player> editingArena = new ArrayList<>();
     public static HashMap<Player, World> playerWorld = new HashMap<>();
 
-    public static int arenaOffset = 0;
+    public static HashMap<Player, Player> inDuel = new HashMap<>();
+
+    public static HashMap<Player, Location> arenaBlue = new HashMap<>();
+    public static HashMap<Player, Location> arenaRed = new HashMap<>();
+
+    public static ArrayList<Player> settingArenaIcon= new ArrayList<>();
+    public static HashMap<Player, String> arenaName = new HashMap<>();
+
+    public static HashMap<Player, String> editArenaName = new HashMap<>();
+    public static ArrayList<String> arenaNames = new ArrayList<>();
 
 }
