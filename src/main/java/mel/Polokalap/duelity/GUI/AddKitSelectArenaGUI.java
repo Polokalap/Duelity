@@ -2,36 +2,36 @@ package mel.Polokalap.duelity.GUI;
 
 import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
+import mel.Polokalap.duelity.Utils.PlayerCache;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ArenaManagerGUI extends GUI {
+public class AddKitSelectArenaGUI extends GUI {
 
     @Override
     public void openGUI(Player player) {
 
-        name = NewConfig.getString("arenas.name");
+        name = NewConfig.getString("kits.add_gui.next.map.name");
         size = 54;
 
         super.openGUI(player);
 
-        ItemStack addArena = new ItemStack(Material.OAK_STAIRS);
-        ItemMeta addMeta = addArena.getItemMeta();
+        ItemStack back = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = back.getItemMeta();
 
-        addMeta.setDisplayName(NewConfig.getString("arenas.add.name"));
+        backMeta.setDisplayName(NewConfig.getString("arenas.edit.back.name"));
 
-        ItemUtil.assignPDC("arenas_add_name", addMeta);
+        ItemUtil.assignPDC("select_arena_add_kit_back_button", backMeta);
 
-        addMeta.setLore(NewConfig.getStringList("arenas.add.lore"));
+        back.setItemMeta(backMeta);
 
-        addArena.setItemMeta(addMeta);
-
-        menu.setItem(4, addArena);
+        menu.setItem(4, back);
 
         ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
 
@@ -42,7 +42,7 @@ public class ArenaManagerGUI extends GUI {
 
             noArenasMeta.setDisplayName(NewConfig.getString("arenas.no_arenas.name"));
 
-            ItemUtil.assignPDC("arenas_no_arenas_name", noArenasMeta);
+            ItemUtil.assignPDC("arena_no_arenas_name", noArenasMeta);
 
             noArenasMeta.setLore(NewConfig.getStringList("arenas.no_arenas.lore"));
 
@@ -77,11 +77,17 @@ public class ArenaManagerGUI extends GUI {
             ItemStack arenaIcon = new ItemStack(icon);
             ItemMeta arenaMeta = arenaIcon.getItemMeta();
 
+            arenaMeta.setLore(null);
+
+            if (!PlayerCache.selectedArenas.containsKey(player)) PlayerCache.selectedArenas.put(player, new ArrayList<>());
+
+            boolean active = PlayerCache.selectedArenas.get(player).contains(name);
+
+            arenaMeta.setEnchantmentGlintOverride(active);
+
             arenaMeta.setDisplayName(NewConfig.getString("arenas.arena.color") + name);
 
             ItemUtil.assignPDC("arena-" + name, arenaMeta);
-
-            arenaMeta.setLore(NewConfig.getStringList("arenas.arena.lore"));
 
             arenaIcon.setItemMeta(arenaMeta);
 

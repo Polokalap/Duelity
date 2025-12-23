@@ -1,6 +1,7 @@
 package mel.Polokalap.duelity.Commands;
 
 import mel.Polokalap.duelity.GUI.KitsManagerGUI;
+import mel.Polokalap.duelity.Listeners.GUIListener;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
@@ -41,6 +42,9 @@ public class KitsCommand implements CommandExecutor, TabCompleter {
         PlayerCache.tempKit.remove(player);
         PlayerCache.tempHp.remove(player);
         PlayerCache.tempGamemode.remove(player);
+        PlayerCache.selectedArenas.remove(player);
+        PlayerCache.editingKit.remove(player);
+        GUIListener.addingKit.remove(player);
 
         return true;
 

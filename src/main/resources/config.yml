@@ -44,6 +44,13 @@ setup:
 
 kits:
   name: "&aManage kits"
+  saved: "ẞprefix Kit successfully saved!"
+  too_many: "ẞprefix There are too many kits!"
+  kit:
+    color: "&6"
+    lore:
+      - "&fRight click to edit"
+      - "&fLeft click to claim"
   add:
     name: "&aAdd kit"
     lore:
@@ -97,6 +104,11 @@ kits:
         lore:
           - "&fClick here to go to the attributes page"
         skin: "ewogICJ0aW1lc3RhbXAiIDogMTc2NTgxNDEzNDU5NSwKICAicHJvZmlsZUlkIiA6ICI1MGM4NTEwYjVlYTA0ZDYwYmU5YTdkNTQyZDZjZDE1NiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNSEZfQXJyb3dSaWdodCIsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9kMzRlZjA2Mzg1MzcyMjJiMjBmNDgwNjk0ZGFkYzBmODVmYmUwNzU5ZDU4MWFhN2ZjZGYyZTQzMTM5Mzc3MTU4IgogICAgfQogIH0KfQ"
+  save:
+    name: "&aSave kit"
+    lore:
+      - "&fClick here to save the kit!"
+    skin: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDk5ODBjMWQyMTE4MDlhOWI2NTY1MDg4ZjU2YTM4ZjJlZjQ5MTE1YzEwNTRmYTY2MjQ1MTIyZTllZWVkZWNjMiJ9fX0="
 
 arenas:
   name: "&aManage arenas"
@@ -158,3 +170,41 @@ arenas:
       lore:
         - "&fClick here to set the icon"
       action_bar: "Hold the item and type \"done\"!"
+
+editor:
+  name: "&aKit editor"
+  saved: "&aKit saved!"
+  admin:
+    import: "&7Import"
+    delete: "&cDelete"
+    back: "&7Back"
+    options: "&7Options"
+  edit:
+    edit_name:
+      name: "&aEdit kit name"
+      lore:
+        - "&fClick here to edit the kit's name"
+    edit_icon:
+      name: "&aEdit kit icon"
+      lore:
+        - "&fClick here to edit the kit's icon"
+    delete:
+      name: "&cDelete kit"
+      lore:
+        - "&cThis step cannot be reversed!"
+    health:
+      name: "&aHealth in your kit: &cẞhp"
+      max: "ẞprefix Minimum HP is 1"
+      lore:
+        - "&a+ &fLeft click"
+        - "&c- &fRight click"
+        - "&4x10 &fShift click"
+    gamemode:
+      name: "&aSet Gamemode"
+      lore:
+        - "ẞa Survival"
+        - "ẞb Adventure"
+    map:
+      name: "&aSelect maps"
+      lore:
+        - "&fClick here to set the maps this kit can be played on"

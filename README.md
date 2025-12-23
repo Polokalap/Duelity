@@ -8,3 +8,8 @@ Features:
 - Easy to use Map manager
 - Support for Schematics
 - An option for non-duel servers
+
+## Todo:
+- Make repeated UI elements use PDC
+- Duel logic
+- Player kit editor

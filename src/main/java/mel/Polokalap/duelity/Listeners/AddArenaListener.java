@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -52,7 +53,7 @@ public class AddArenaListener implements Listener {
 
                 int number = arenas.getKeys(false).size();
 
-                if (number >= 53) {
+                if (number >= 28) {
 
                     Sound.Error(player);
                     player.sendMessage(NewConfig.getString("arenas.world.too_many"));
@@ -89,40 +90,15 @@ public class AddArenaListener implements Listener {
     }
 
     @EventHandler
-    public void onChatMessage(AsyncChatEvent event) {
+    public void onDeath(PlayerDeathEvent event) {
 
         Player player = event.getPlayer();
-        String message = event.signedMessage().message();
 
-//        if (settingSpawn.contains(player)) {
-//
-//            event.setCancelled(true);
-//
-//            if (message.equals("done")) {
-//
-//                settingSpawn.remove(player);
-//                muteChat.remove(player);
-//
-//                Bukkit.getScheduler().runTask(plugin, () -> {
-//
-//                    Location loc = player.getLocation();
-//
-//                    player.sendActionBar(" ");
-//                    new SetupGUI().openGUI(player);
-//
-//                    config.set("settings.spawn", loc);
-//                    plugin.saveConfig();
-//
-//                });
-//
-//                return;
-//
-//            }
-//
-//            Sound.Error(player);
-//            player.sendActionBar("§c" + NewConfig.getString("setup.spawn.action_bar"));
-//
-//        }
+        if (PlayerCache.editingArena.contains(player)) {
+
+            event.setCancelled(true);
+
+        }
 
     }
 

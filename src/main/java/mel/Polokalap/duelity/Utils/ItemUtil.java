@@ -1,8 +1,12 @@
 package mel.Polokalap.duelity.Utils;
 
 import mel.Polokalap.duelity.Main;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 public class ItemUtil {
 
@@ -20,6 +24,26 @@ public class ItemUtil {
         ItemStack item = configuration.getItemStack(path);
 
         return item;
+
+    }
+
+    public static boolean PDCHelper(String key, ItemStack item) {
+
+        if (!item.hasItemMeta() || item.getItemMeta() == null) return false;
+
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        NamespacedKey usedKey = new NamespacedKey(plugin, key);
+
+        return pdc.has(usedKey, PersistentDataType.INTEGER);
+
+    }
+
+    public static void assignPDC(String key, ItemMeta meta) {
+
+        NamespacedKey newKey = new NamespacedKey(plugin, key);
+        meta.getPersistentDataContainer().set(newKey, PersistentDataType.INTEGER, 42);
 
     }
 

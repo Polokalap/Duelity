@@ -69,8 +69,8 @@ public final class Main extends JavaPlugin {
         // Command: getCommand("command").setExecutor(new Class());
         getCommand("#setup").setExecutor(new SetupCommand());
         getCommand("#kits").setExecutor(new KitsCommand());
-        getCommand("#wetest").setExecutor(new WorldEditTestCommand());
-        getCommand("#arenas").setExecutor(new ArenasAddCommand());
+//        getCommand("#wetest").setExecutor(new WorldEditTestCommand());
+        getCommand("#arenas").setExecutor(new ArenasCommand());
         getCommand("leave").setExecutor(new LeaveCommand());
 
         // Listener: getServer().getPluginManager().registerEvents(new Class(), this);
@@ -78,12 +78,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new ArenaGUIListener(), this);
         getServer().getPluginManager().registerEvents(new AddArenaListener(), this);
+        getServer().getPluginManager().registerEvents(new EditKitGUIListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
         getCommand("#setup").setTabCompleter(new SetupCommand());
         getCommand("#kits").setTabCompleter(new KitsCommand());
-        getCommand("#wetest").setTabCompleter(new WorldEditTestCommand());
-        getCommand("#arenas").setTabCompleter(new ArenasAddCommand());
+//        getCommand("#wetest").setTabCompleter(new WorldEditTestCommand());
+        getCommand("#arenas").setTabCompleter(new ArenasCommand());
         getCommand("leave").setTabCompleter(new LeaveCommand());
 
     }

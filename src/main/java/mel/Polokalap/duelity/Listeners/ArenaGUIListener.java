@@ -4,12 +4,10 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import mel.Polokalap.duelity.GUI.*;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Managers.AddArenaManager;
-import mel.Polokalap.duelity.Utils.Gamemodes;
-import mel.Polokalap.duelity.Utils.NewConfig;
-import mel.Polokalap.duelity.Utils.PlayerCache;
-import mel.Polokalap.duelity.Utils.Sound;
+import mel.Polokalap.duelity.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -21,6 +19,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -36,29 +35,14 @@ public class ArenaGUIListener implements Listener {
 
     private static Main plugin = Main.getInstance();
     private static FileConfiguration config = plugin.getConfig();
-    private static FileConfiguration kits = plugin.getKitConfig();
 
     private HashMap<Player, Long> now = new HashMap<>();
     private int delay = 250;
 
     private ArrayList<Player> muteChat = new ArrayList<>();
     private ArrayList<Player> renamingArena = new ArrayList<>();
-    private ArrayList<Player> addingArena = new ArrayList<>();
     private ArrayList<Player> settingArenaIcon = new ArrayList<>();
 
-    @EventHandler
-    public void onClose(InventoryCloseEvent event) {
-
-        Inventory inv = event.getInventory();
-        Player player = (Player) event.getPlayer();
-
-        if (inv.getHolder() instanceof GUI) {
-
-            Sound.Close(player);
-
-        }
-
-    }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -81,7 +65,7 @@ public class ArenaGUIListener implements Listener {
 
             now.put(player, System.currentTimeMillis());
 
-            if (name.equals(NewConfig.getString("arenas.add.name"))) {
+            if (ItemUtil.PDCHelper("arenas_add_name", item)) {
 
                 Sound.Click(player);
 
@@ -90,7 +74,7 @@ public class ArenaGUIListener implements Listener {
 
             }
 
-            if (name.equals(NewConfig.getString("arenas.edit.edit_name.name"))) {
+            if (ItemUtil.PDCHelper("arenas_edit_edit_name_name", item)) {
 
                 Sound.Click(player);
 
@@ -116,7 +100,7 @@ public class ArenaGUIListener implements Listener {
 
             }
 
-            if (name.equals(NewConfig.getString("arenas.edit.icon.name"))) {
+            if (ItemUtil.PDCHelper("arenas_edit_icon_name", item)) {
 
                 Sound.Click(player);
 
@@ -142,7 +126,7 @@ public class ArenaGUIListener implements Listener {
 
             }
 
-            if (name.equals(NewConfig.getString("arenas.edit.delete.name"))) {
+            if (ItemUtil.PDCHelper("arenas_edit_delete_name", item)) {
 
                 Sound.Click(player);
 
@@ -204,17 +188,19 @@ public class ArenaGUIListener implements Listener {
 
                 }
 
-                player.closeInventory();
+                new ArenaManagerGUI().openGUI(player);
 
                 return;
 
             }
 
-            if (name.equals(NewConfig.getString("arenas.edit.back.name"))) {
+            if (ItemUtil.PDCHelper("arena_back_button", item)) {
 
                 new ArenaManagerGUI().openGUI(player);
 
             }
+
+            if (!event.getView().getTitle().equals(NewConfig.getString("arenas.name"))) return;
 
             ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
 
@@ -222,7 +208,7 @@ public class ArenaGUIListener implements Listener {
 
                 ConfigurationSection arena = arenas.getConfigurationSection(arenaId);
 
-                if (name.replaceAll(NewConfig.getString("arenas.arena.color"), "").equals(arena.get("name"))) {
+                if (ItemUtil.PDCHelper("arena-" + arena.get("name"), item)) {
 
                     if (!event.isRightClick()) return;
 
@@ -250,12 +236,7 @@ public class ArenaGUIListener implements Listener {
 
             if (!message.isEmpty()) {
 
-                renamingArena.remove(player);
-                muteChat.remove(player);
-
                 Bukkit.getScheduler().runTask(plugin, () -> {
-
-                    player.sendActionBar(" ");
 
                     ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
 
@@ -290,25 +271,30 @@ public class ArenaGUIListener implements Listener {
 
                                 player.sendMessage(NewConfig.getString("arenas.edit.edit_name.exists"));
                                 Sound.Error(player);
-                                return;
+
+                            } else {
+
+                                File from = new File(plugin.getDataFolder(), "Maps/" + PlayerCache.editArenaName.get(player) + ".schem");
+                                File to = new File(plugin.getDataFolder(), "Maps/" + message + ".schem");
+
+                                try {
+                                    Files.move(Path.of(from.getPath()), Path.of(to.getPath()));
+                                } catch (IOException ignored) {
+                                }
+
+                                arenas.set(key + ".name", message);
+                                PlayerCache.editArenaName.put(player, message);
+
+                                player.sendActionBar(" ");
+
+                                plugin.saveArenaConfig();
+
+                                new EditArenaGUI().openGUI(player);
+
+                                renamingArena.remove(player);
+                                muteChat.remove(player);
 
                             }
-
-                            File from = new File(plugin.getDataFolder(), "Maps/" + PlayerCache.editArenaName.get(player) + ".schem");
-                            File to = new File(plugin.getDataFolder(), "Maps/" + message + ".schem");
-
-                            try {
-                                Files.move(Path.of(from.getPath()), Path.of(to.getPath()));
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                            arenas.set(key + ".name", message);
-                            PlayerCache.editArenaName.put(player, message);
-
-                            plugin.saveArenaConfig();
-
-                            new EditArenaGUI().openGUI(player);
 
                         }
 

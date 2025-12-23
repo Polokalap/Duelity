@@ -18,10 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class ArenasAddCommand implements CommandExecutor, TabCompleter {
+public class ArenasCommand implements CommandExecutor, TabCompleter {
 
     private static Main plugin = Main.getInstance();
     private static FileConfiguration config = plugin.getConfig();
@@ -118,6 +117,36 @@ public class ArenasAddCommand implements CommandExecutor, TabCompleter {
 
                     break;
 
+                case "wand":
+
+                    switch (args[1]) {
+
+                        case "give":
+
+                            ItemStack wand = new ItemStack(Material.IRON_SHOVEL);
+
+                            ItemMeta wandMeta = wand.getItemMeta();
+
+                            wandMeta.setDisplayName(NewConfig.getString("arenas.wand.name"));
+                            wandMeta.setLore(NewConfig.getStringList("arenas.wand.lore"));
+
+                            wand.setItemMeta(wandMeta);
+
+                            player.getInventory().addItem(wand);
+
+                            break;
+
+                        default:
+
+                            player.sendMessage(NewConfig.getString("player.args"));
+                            Sound.Error(player);
+
+                            break;
+
+                    }
+
+                    break;
+
                 case "set":
 
                     if (args.length < 1) {
@@ -184,11 +213,22 @@ public class ArenasAddCommand implements CommandExecutor, TabCompleter {
             switch (args.length) {
 
                 case 1:
-                    return List.of("save", "set");
+                    return List.of("save", "set", "wand");
 
                 case 2:
-                    if (args[1].equalsIgnoreCase("set")) return List.of("blue", "red");
-                    return List.of();
+
+                    switch (args[0].toLowerCase()) {
+
+                        case "set":
+                            return List.of("blue", "red");
+
+                        case "wand":
+                            return List.of("give");
+
+                        default:
+                            return List.of();
+
+                    }
 
                 default:
                     return List.of();

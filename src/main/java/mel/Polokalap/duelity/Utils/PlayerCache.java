@@ -36,4 +36,8 @@ public class PlayerCache {
     public static HashMap<Player, String> editArenaName = new HashMap<>();
     public static ArrayList<String> arenaNames = new ArrayList<>();
 
+    public static HashMap<Player, ArrayList<String>> selectedArenas = new HashMap<>();
+    public static HashMap<Player, String> editingKit = new HashMap<>();
+    public static ArrayList<Player> inKitEditor = new ArrayList<>();
+
 }

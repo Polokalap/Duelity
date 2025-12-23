@@ -40,4 +40,10 @@ public class Sound {
 
     }
 
+    public static void Swoosh(Player player) {
+
+        player.playSound(player, org.bukkit.Sound.ENTITY_ARMADILLO_BRUSH, 0.5f, 1.0f);
+
+    }
+
 }

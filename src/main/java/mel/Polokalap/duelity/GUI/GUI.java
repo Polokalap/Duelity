@@ -21,10 +21,13 @@ public class GUI implements InventoryHolder {
     int size;
     String name;
     Inventory menu;
+    InventoryHolder holder = this;
+
+    boolean filler = true;
 
     public void openGUI(Player player) {
 
-        menu = Bukkit.createInventory(this, size, name);
+        menu = Bukkit.createInventory(holder, size, name);
 
         ItemStack empty = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta emptyMeta = empty.getItemMeta();
@@ -36,7 +39,7 @@ public class GUI implements InventoryHolder {
 
         for (int i = 0; i < menu.getSize(); i++) {
 
-            menu.setItem(i, empty);
+            if (filler) menu.setItem(i, empty);
 
         }
 

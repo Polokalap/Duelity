@@ -1,5 +1,6 @@
 package mel.Polokalap.duelity.GUI;
 
+import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +24,8 @@ public class SetupGUI extends GUI {
 
         duelMeta.setDisplayName(NewConfig.getString("setup.duel.name"));
 
+        ItemUtil.assignPDC("setup_duel_name", duelMeta);
+
         duelMeta.setLore(List.of(NewConfig.getStringCompiled("setup.duel.lore").replaceAll("ẞanswer", config.getBoolean("settings.duel_server") ? NewConfig.getString("player.y") : NewConfig.getString("player.n"))));
 
         duelServer.setItemMeta(duelMeta);
@@ -34,6 +37,8 @@ public class SetupGUI extends GUI {
 
         spawnMeta.setDisplayName(NewConfig.getString("setup.spawn.name"));
 
+        ItemUtil.assignPDC("setup_spawn_name", spawnMeta);
+
         spawnMeta.setLore(NewConfig.getStringList("setup.spawn.lore"));
 
         spawnItem.setItemMeta(spawnMeta);
@@ -44,6 +49,8 @@ public class SetupGUI extends GUI {
         ItemMeta saveMeta = saveItem.getItemMeta();
 
         saveMeta.setDisplayName(NewConfig.getString("setup.save.name"));
+
+        ItemUtil.assignPDC("setup_save_name", saveMeta);
 
         saveMeta.setLore(NewConfig.getStringList("setup.save.lore"));
 

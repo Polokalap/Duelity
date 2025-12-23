@@ -1,12 +1,16 @@
 package mel.Polokalap.duelity.GUI;
 
+import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 
@@ -24,6 +28,8 @@ public class EditArenaGUI extends GUI {
         ItemMeta nameMeta = nameArena.getItemMeta();
 
         nameMeta.setDisplayName(NewConfig.getString("arenas.edit.edit_name.name"));
+
+        ItemUtil.assignPDC("arenas_edit_edit_name_name", nameMeta);
 
         nameMeta.setLore(NewConfig.getStringList("arenas.edit.edit_name.lore"));
 
@@ -48,6 +54,8 @@ public class EditArenaGUI extends GUI {
 
         iconMeta.setDisplayName(NewConfig.getString("arenas.edit.icon.name"));
 
+        ItemUtil.assignPDC("arenas_edit_icon_name", iconMeta);
+
         iconMeta.setLore(NewConfig.getStringList("arenas.edit.icon.lore"));
 
         iconArena.setItemMeta(iconMeta);
@@ -59,6 +67,8 @@ public class EditArenaGUI extends GUI {
 
         deleteMeta.setDisplayName(NewConfig.getString("arenas.edit.delete.name"));
 
+        ItemUtil.assignPDC("arenas_edit_delete_name", deleteMeta);
+
         deleteMeta.setLore(NewConfig.getStringList("arenas.edit.delete.lore"));
 
         deleteArena.setItemMeta(deleteMeta);
@@ -67,6 +77,8 @@ public class EditArenaGUI extends GUI {
 
         ItemStack backButton = new ItemStack(Material.ARROW);
         ItemMeta backMeta = backButton.getItemMeta();
+
+        ItemUtil.assignPDC("arena_back_button", backMeta);
 
         backMeta.setDisplayName(NewConfig.getString("arenas.edit.back.name"));
 

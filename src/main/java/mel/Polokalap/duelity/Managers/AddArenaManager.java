@@ -58,6 +58,8 @@ public class AddArenaManager {
         PlayerCache.regS.remove(player);
         player.getInventory().clear();
 
+        player.setGameMode(GameMode.SURVIVAL);
+
         player.sendMessage(NewConfig.getString("arenas.world.quit"));
 
     }
