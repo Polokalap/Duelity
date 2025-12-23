@@ -78,6 +78,14 @@ public class ArenasCommand implements CommandExecutor, TabCompleter {
 
                         }
 
+                        if (!args[1].matches("^[a-zA-Z0-9:_-]+$")) {
+
+                            Sound.Error(player);
+                            player.sendMessage(NewConfig.getString("arenas.invalid_name"));
+                            return true;
+
+                        }
+
                         boolean exists = false;
 
                         ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");

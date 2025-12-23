@@ -112,6 +112,7 @@ kits:
 
 arenas:
   name: "&aManage arenas"
+  invalid_name: "ẞprefix Your arena's name may only contain english letters, numbers and these characters: \":\", \"-\", \"_\"."
   add:
     name: "&aAdd arena"
     lore:
@@ -190,6 +191,7 @@ editor:
         - "&fClick here to edit the kit's icon"
     delete:
       name: "&cDelete kit"
+      deleted: "ẞprefix Kit selected successfully!"
       lore:
         - "&cThis step cannot be reversed!"
     health:

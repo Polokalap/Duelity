@@ -38,6 +38,8 @@ public class GUIListener implements Listener {
     public static ArrayList<Player> addingKit = new ArrayList<>();
     private ArrayList<Player> addingKitName = new ArrayList<>();
     private ArrayList<Player> addingKitIcon = new ArrayList<>();
+    private ArrayList<Player> settingKitName = new ArrayList<>();
+    private ArrayList<Player> settingKitIcon = new ArrayList<>();
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -387,6 +389,29 @@ public class GUIListener implements Listener {
 
                         item.setItemMeta(meta);
 
+                    } else if (ItemUtil.PDCHelper("arena-" + arena.get("name") + "-editkit", item)) {
+
+                        Sound.Click(player);
+
+                        String editedName = name.replaceAll(NewConfig.getString("arenas.arena.color"), "");
+
+                        ItemMeta meta = item.getItemMeta();
+
+                        if (!PlayerCache.selectedArenas.containsKey(player)) PlayerCache.selectedArenas.put(player, new ArrayList<>());
+
+                        if (PlayerCache.selectedArenas.get(player).contains(editedName)) PlayerCache.selectedArenas.get(player).remove(editedName);
+                        else PlayerCache.selectedArenas.get(player).add(editedName);
+
+                        meta.setEnchantmentGlintOverride(PlayerCache.selectedArenas.get(player).contains(editedName));
+
+                        item.setItemMeta(meta);
+
+                        ConfigurationSection kit = KitUtil.getItems(PlayerCache.editingKit.get(player));
+
+                        kit.set("arenas", PlayerCache.selectedArenas.get(player));
+
+                        plugin.saveKitConfig();
+
                     }
 
                 }
@@ -402,6 +427,147 @@ public class GUIListener implements Listener {
             if (ItemUtil.PDCHelper("select_arena_add_kit_back_button", item)) {
 
                 new AddKitAttributesGUI().openGUI(player);
+
+            }
+
+            if (ItemUtil.PDCHelper("editor_edit_map_name", item)) {
+
+                new EditKitSelectArenaGUI().openGUI(player);
+
+            }
+
+            if (ItemUtil.PDCHelper("edit_kit_select_arena_back", item)) {
+
+                new AdminEditKitGUI().openGUI(player);
+
+            }
+
+            if (ItemUtil.PDCHelper("admin_edit_kit_gui_gamemode", item)) {
+
+                Sound.Click(player);
+
+                if (PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL) PlayerCache.tempGamemode.put(player, Gamemodes.ADVENTURE);
+                else PlayerCache.tempGamemode.put(player, Gamemodes.SURVIVAL);
+
+                ItemMeta itemMeta = item.getItemMeta();
+
+                itemMeta.setLore(List.of(
+                        NewConfig.getStringList("editor.edit.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("editor.edit.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                ));
+
+                item.setItemMeta(itemMeta);
+
+                ConfigurationSection kit = KitUtil.getItems(PlayerCache.editingKit.get(player));
+
+                kit.set("gamemode", PlayerCache.tempGamemode.get(player).toString());
+
+                plugin.saveKitConfig();
+
+            }
+
+            if (ItemUtil.PDCHelper("editor_edit_delete_name", item)) {
+
+                Sound.Ping(player);
+
+                ConfigurationSection kit = KitUtil.getItems(PlayerCache.editingKit.get(player));
+
+                ConfigurationSection kitsSetcion = kits.getConfigurationSection("kits");
+
+                if (kitsSetcion == null) return;
+
+                String targetName = PlayerCache.editingKit.get(player);
+
+                List<Integer> ids = kitsSetcion.getKeys(false).stream()
+                        .map(Integer::parseInt)
+                        .sorted()
+                        .toList();
+
+                boolean shift = false;
+
+                for (int id : ids) {
+
+                    String key = String.valueOf(id);
+                    ConfigurationSection selectedKit = kitsSetcion.getConfigurationSection(key);
+                    if (selectedKit == null) continue;
+
+                    if (selectedKit.getString("name").equals(targetName)) {
+
+                        kitsSetcion.set(key, null);
+                        shift = true;
+                        continue;
+
+                    }
+
+                    if (shift) {
+
+                        String newKey = String.valueOf(id - 1);
+
+                        ConfigurationSection target = kitsSetcion.createSection(newKey);
+
+                        for (String subKey : selectedKit.getKeys(false)) {
+
+                            target.set(subKey, selectedKit.get(subKey));
+
+                        }
+
+                        kitsSetcion.set(key, null);
+
+                    }
+
+                }
+
+                player.sendMessage(NewConfig.getString("editor.edit.delete.deleted"));
+
+                plugin.saveKitConfig();
+
+                new KitsManagerGUI().openGUI(player);
+
+            }
+
+            if (ItemUtil.PDCHelper("editor_edit_edit_name_name", item)) {
+
+                player.closeInventory();
+                settingKitName.add(player);
+                muteChat.add(player);
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (!settingKitName.contains(player)) cancel();
+
+                        player.sendActionBar("§a" + NewConfig.getString("kits.add_gui.set_name.action_bar"));
+
+                        if (!settingKitName.contains(player)) player.sendActionBar(" ");
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 40L);
+
+            }
+
+            if (ItemUtil.PDCHelper("editor_edit_edit_icon_name", item)) {
+
+                player.closeInventory();
+                settingKitIcon.add(player);
+                muteChat.add(player);
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (!settingKitIcon.contains(player)) cancel();
+
+                        player.sendActionBar("§a" + NewConfig.getString("kits.add_gui.set_icon.action_bar"));
+
+                        if (!settingKitIcon.contains(player)) player.sendActionBar(" ");
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 40L);
 
             }
 
@@ -480,20 +646,17 @@ public class GUIListener implements Listener {
         }
 
         if (addingKitName.contains(player)) {
+
             event.setCancelled(true);
 
+            if (!message.matches("^[a-zA-Z0-9:_-]+$")) {
+
+                Sound.Error(player);
+                return;
+
+            }
+
             boolean exists = false;
-//            List<?> kitsList = kits.getList("kits");
-//
-//            if (!kitsList.isEmpty()) {
-//
-//                for (int i = 0; i < kitsList.size(); i++) {
-//
-//                    if (kits.getString("kits." + i + ".name").equalsIgnoreCase(message)) exists = true;
-//
-//                }
-//
-//            }
 
             ConfigurationSection kitsSection = kits.getConfigurationSection("kits");
 
@@ -539,6 +702,13 @@ public class GUIListener implements Listener {
             event.setCancelled(true);
 
             if (message.equals("done")) {
+
+                if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+
+                    Sound.Error(player);
+                    return;
+
+                }
 
                 addingKitIcon.remove(player);
                 muteChat.remove(player);
@@ -596,6 +766,101 @@ public class GUIListener implements Listener {
 
             Sound.Error(player);
             player.sendActionBar("§c" + NewConfig.getString("kits.add_gui.set_inventory.action_bar"));
+
+        }
+
+        if (settingKitName.contains(player)) {
+
+            event.setCancelled(true);
+
+            if (!message.matches("^[a-zA-Z0-9:_-]+$")) {
+
+                Sound.Error(player);
+                return;
+
+            }
+
+            boolean exists = false;
+
+            ConfigurationSection kitsSection = kits.getConfigurationSection("kits");
+
+            if (kitsSection == null) {
+                kitsSection = kits.createSection("kits");
+            }
+
+            for (String kitId : kitsSection.getKeys(false)) {
+
+                ConfigurationSection kit = kitsSection.getConfigurationSection(kitId);
+
+                String name = kit.getString("name");
+
+                if (name.equals(message)) exists = true;
+
+            }
+
+            if (exists) {
+
+                Sound.Error(player);
+                player.sendActionBar(NewConfig.getString("kits.add_gui.set_name.gui.exists"));
+                return;
+
+            }
+
+            settingKitName.remove(player);
+            muteChat.remove(player);
+
+            ConfigurationSection kit = KitUtil.getItems(PlayerCache.editingKit.get(player));
+
+            kit.set("name", message);
+
+            PlayerCache.editingKit.put(player, message);
+
+            plugin.saveKitConfig();
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+
+                new AdminEditKitGUI().openGUI(player);
+
+            });
+
+            return;
+
+        }
+
+        if (settingKitIcon.contains(player)) {
+
+            event.setCancelled(true);
+
+            if (message.equals("done")) {
+
+                if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+
+                    Sound.Error(player);
+                    return;
+
+                }
+
+                settingKitIcon.remove(player);
+                muteChat.remove(player);
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+
+                    player.sendActionBar(" ");
+
+                    new AdminEditKitGUI().openGUI(player);
+
+                });
+
+                ConfigurationSection kit = KitUtil.getItems(PlayerCache.editingKit.get(player));
+                kit.set("icon", player.getInventory().getItemInMainHand().getType().toString());
+                plugin.saveKitConfig();
+
+                return;
+
+            }
+
+            Sound.Error(player);
+            player.sendActionBar("§c" + NewConfig.getString("kits.add_gui.set_icon.action_bar"));
 
         }
 
