@@ -13,6 +13,7 @@ public class PlayerManager {
     public static void load(Player player) {
 
         player.setMaxHealth(20.0d);
+        player.setInvulnerable(false);
 
         for (Player players : Bukkit.getOnlinePlayers()) {
 

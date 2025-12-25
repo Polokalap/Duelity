@@ -3,6 +3,7 @@ package mel.Polokalap.duelity;
 import mel.Polokalap.duelity.Commands.*;
 import mel.Polokalap.duelity.Listeners.*;
 import mel.Polokalap.duelity.Managers.AddArenaManager;
+import mel.Polokalap.duelity.Managers.KitEditorManager;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.WorldUtil;
 import org.bukkit.World;
@@ -72,6 +73,7 @@ public final class Main extends JavaPlugin {
 //        getCommand("#wetest").setExecutor(new WorldEditTestCommand());
         getCommand("#arenas").setExecutor(new ArenasCommand());
         getCommand("leave").setExecutor(new LeaveCommand());
+        getCommand("editkit").setExecutor(new EditKitCommand());
 
         // Listener: getServer().getPluginManager().registerEvents(new Class(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
@@ -79,6 +81,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ArenaGUIListener(), this);
         getServer().getPluginManager().registerEvents(new AddArenaListener(), this);
         getServer().getPluginManager().registerEvents(new EditKitGUIListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerKitEditorGUIListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
         getCommand("#setup").setTabCompleter(new SetupCommand());
@@ -86,6 +89,7 @@ public final class Main extends JavaPlugin {
 //        getCommand("#wetest").setTabCompleter(new WorldEditTestCommand());
         getCommand("#arenas").setTabCompleter(new ArenasCommand());
         getCommand("leave").setTabCompleter(new LeaveCommand());
+        getCommand("editkit").setTabCompleter(new EditKitCommand());
 
     }
 
@@ -103,6 +107,12 @@ public final class Main extends JavaPlugin {
         for (Player player : PlayerCache.editingArena) {
 
             AddArenaManager.leave(player);
+
+        }
+
+        for (Player player : PlayerCache.inPlayerKitEditor) {
+
+            KitEditorManager.leave(player, player.getOpenInventory().getTopInventory(), false);
 
         }
 
@@ -142,7 +152,6 @@ public final class Main extends JavaPlugin {
         }
 
     }
-
 
     public void saveKitConfig() {
 

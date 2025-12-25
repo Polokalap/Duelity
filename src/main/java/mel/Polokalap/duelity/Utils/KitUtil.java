@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class KitUtil {
@@ -13,6 +14,7 @@ public class KitUtil {
     private static Main plugin = Main.getInstance();
     private static FileConfiguration config = plugin.getConfig();
     private static FileConfiguration kits = plugin.getKitConfig();
+    private static FileConfiguration players = plugin.getPlayerConfig();
 
     public static ConfigurationSection getItems(String name) {
 
@@ -32,7 +34,7 @@ public class KitUtil {
             String kitName = kit.getString("name");
             if (kitName == null) continue;
 
-            if (kitName.equals(name)) {
+            if (kitName.toLowerCase().equals(name.toLowerCase())) {
 
                 exists = true;
                 finalKit = kit;
@@ -49,6 +51,58 @@ public class KitUtil {
         }
 
         return finalKit;
+
+    }
+
+    public static ConfigurationSection getPlayerItems(String name, Player player) {
+
+        boolean exists = false;
+        int kitNumber = -1;
+        int i = 0;
+        ConfigurationSection kitsSection = kits.getConfigurationSection("kits");
+
+        if (kitsSection == null) {
+            kitsSection = kits.createSection("kits");
+        }
+
+        for (String key : kitsSection.getKeys(false)) {
+
+            ConfigurationSection kit = kitsSection.getConfigurationSection(key);
+            if (kit == null) continue;
+
+            String kitName = kit.getString("name");
+            if (kitName == null) continue;
+
+            if (kitName.toLowerCase().equals(name.toLowerCase())) {
+
+                exists = true;
+                kitNumber = i;
+
+            }
+
+            i++;
+
+        }
+
+        if (!exists) {
+
+            plugin.getLogger().info("Kit " + name + " doesn't exist!");
+            return null;
+
+        }
+
+        String path = "players." + player.getUniqueId() + ".kits." + kitNumber;
+        ConfigurationSection playerKit = players.getConfigurationSection(path);
+
+        if (playerKit == null) {
+
+            playerKit = players.createSection(path);
+            playerKit.set("items", getItems(name).getList("items"));
+            plugin.savePlayerConfig();
+
+        }
+
+        return playerKit;
 
     }
 

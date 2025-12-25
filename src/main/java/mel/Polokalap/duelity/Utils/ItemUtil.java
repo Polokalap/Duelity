@@ -40,10 +40,44 @@ public class ItemUtil {
 
     }
 
+    public static NamespacedKey getPDCKey(ItemStack item) {
+
+        if (item == null || !item.hasItemMeta()) return null;
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        for (NamespacedKey key : pdc.getKeys()) {
+
+            if (key.getNamespace().equals("duelity") &&
+
+                    key.getKey().startsWith("player_kit_editor_item")) {
+
+                return key;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
     public static void assignPDC(String key, ItemMeta meta) {
 
         NamespacedKey newKey = new NamespacedKey(plugin, key);
         meta.getPersistentDataContainer().set(newKey, PersistentDataType.INTEGER, 42);
+
+    }
+
+    public static void removePDC(ItemStack item, NamespacedKey key) {
+
+        if (item == null || !item.hasItemMeta() || key == null) return;
+
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        pdc.remove(key);
+        item.setItemMeta(meta);
 
     }
 

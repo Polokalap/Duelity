@@ -1,10 +1,22 @@
-# IMPORTANT! Plugin is WIP
+## IMPORTANT! Plugin is WIP
 ![time](https://hackatime-badge.hackclub.com/U09C7CEA4JJ/Duelity?label=Duelity&color=orange)
 
-Duelity is a Duel plugin made for HackClub Carnival.
+# Duelity is a Duel plugin made for HackClub Carnival, by Polokalap!
 
-Features:
-- Easy to use Kit manager
-- Easy to use Map manager
-- Support for Schematics
-- An option for non-duel servers
+## Commands:
+- ### Admin:
+- - /#setup
+- - /#arenas
+- - /#kits
+- ### Player:
+- - /duel
+- - /editkit
+
+## How to add an arena:
+video link here when I finished the project
+
+## How to add a kit:
+video link here when I finished the project
+
+## Required plugins:
+- [FAWE](https://modrinth.com/plugin/fastasyncworldedit)

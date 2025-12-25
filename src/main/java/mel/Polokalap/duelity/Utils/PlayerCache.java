@@ -40,4 +40,7 @@ public class PlayerCache {
     public static HashMap<Player, String> editingKit = new HashMap<>();
     public static ArrayList<Player> inKitEditor = new ArrayList<>();
 
+    public static ArrayList<Player> inPlayerKitEditor = new ArrayList<>();
+    public static HashMap<Player, ItemStack[]> playerInventory = new HashMap<>();
+
 }

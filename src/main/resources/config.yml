@@ -23,6 +23,7 @@ admin:
     - "&fYour &lDuelity &r&fsetup is incomplete!"
     - "&fDo /#setup start to set up the plugin!"
     - "&c------------------------------------"
+  kit_editor_alert: "&e&lWARNING: &r&cPlayer &4%player% &ctried to put an illegal item into a kit!"
 
 setup:
   name: "&aSetup Duelity"
@@ -175,11 +176,16 @@ arenas:
 editor:
   name: "&aKit editor"
   saved: "&aKit saved!"
+  warning: "&eIllegal items found!"
+  reset: "&aKit reset!"
   admin:
     import: "&7Import"
     delete: "&cDelete"
     back: "&7Back"
     options: "&7Options"
+  player:
+    save: "&aSave"
+    reset: "&6Reset"
   edit:
     edit_name:
       name: "&aEdit kit name"

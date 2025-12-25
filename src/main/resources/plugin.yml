@@ -17,6 +17,8 @@ commands:
     description: "Leave from... anything, really that has to do something with Duelity"
     aliases:
       - "l"
+  "editkit":
+    description: "Edit your kits in Duelity!"
 permissions:
   duelity.admin:
     default: op
