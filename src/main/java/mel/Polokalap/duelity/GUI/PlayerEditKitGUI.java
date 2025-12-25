@@ -48,6 +48,7 @@ public class PlayerEditKitGUI extends GUI {
         resetMeta.setDisplayName(NewConfig.getString("editor.player.reset"));
 
         ItemUtil.assignPDC("player_kit_editor_reset", resetMeta);
+        ItemUtil.assignPDC("unmoveable", resetMeta);
 
         resetItem.setItemMeta(resetMeta);
 
