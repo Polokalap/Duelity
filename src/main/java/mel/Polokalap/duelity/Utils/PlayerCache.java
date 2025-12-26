@@ -43,4 +43,9 @@ public class PlayerCache {
     public static ArrayList<Player> inPlayerKitEditor = new ArrayList<>();
     public static HashMap<Player, ItemStack[]> playerInventory = new HashMap<>();
 
+    public static HashMap<Player, Player> duelOpponent = new HashMap<>();
+    public static HashMap<Player, Boolean> duelAllowSpectators = new HashMap<>();
+    public static HashMap<Player, Integer> duelRounds = new HashMap<>();
+    public static HashMap<Player, String> duelKit = new HashMap<>();
+
 }

@@ -19,6 +19,8 @@ commands:
       - "l"
   "editkit":
     description: "Edit your kits in Duelity!"
+  "duel":
+    description: "Duel someone in Duelity!"
 permissions:
   duelity.admin:
     default: op

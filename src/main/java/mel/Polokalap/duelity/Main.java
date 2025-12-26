@@ -74,6 +74,7 @@ public final class Main extends JavaPlugin {
         getCommand("#arenas").setExecutor(new ArenasCommand());
         getCommand("leave").setExecutor(new LeaveCommand());
         getCommand("editkit").setExecutor(new EditKitCommand());
+        getCommand("duel").setExecutor(new DuelCommand());
 
         // Listener: getServer().getPluginManager().registerEvents(new Class(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
@@ -82,6 +83,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AddArenaListener(), this);
         getServer().getPluginManager().registerEvents(new EditKitGUIListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerKitEditorGUIListener(), this);
+        getServer().getPluginManager().registerEvents(new DuelGUIListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
         getCommand("#setup").setTabCompleter(new SetupCommand());
@@ -90,6 +92,7 @@ public final class Main extends JavaPlugin {
         getCommand("#arenas").setTabCompleter(new ArenasCommand());
         getCommand("leave").setTabCompleter(new LeaveCommand());
         getCommand("editkit").setTabCompleter(new EditKitCommand());
+        getCommand("duel").setTabCompleter(new DuelCommand());
 
     }
 

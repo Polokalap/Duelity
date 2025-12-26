@@ -216,3 +216,20 @@ editor:
       name: "&aSelect maps"
       lore:
         - "&fClick here to set the maps this kit can be played on"
+
+duel:
+  name: "&aDuel: &3%player%"
+  offline: "&7%player% is not online!"
+  self: "&7You can't invite yourself!"
+  color: "&9"
+  gui:
+    spectate:
+      name: "&eEnable spectators: %state%"
+      lore:
+        - "&fBy turning this on, you allow"
+        - "&f&leveryone &fto watch your duels"
+    rounds:
+      name: "&eRounds: &7%rounds%"
+      lore:
+        - "&fThe rounds someone has to win"
+        - "&fto end the duel."
