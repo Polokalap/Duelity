@@ -128,18 +128,4 @@ public class DuelGUIListener implements Listener {
 
     }
 
-    @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
-
-        Player player = event.getPlayer();
-
-        if (event.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof EditorGUI) {
-
-            Sound.Swoosh(player);
-            event.getItemDrop().remove();
-
-        }
-
-    }
-
 }
