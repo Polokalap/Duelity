@@ -23,7 +23,7 @@ In December 2025, my friend told me about [HackClub Carnival](https://carnival.h
 The name came from the CS:2 skin, Duality because I was trying to think of a name and gave it this temporarily and didn't bother to change it.
 
 ## Here's a video featuring the plugin:
-![video](https://www.youtube.com/embed/fkSXEPV_dxI)
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/fkSXEPV_dxI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## How to set up a new arena
 
