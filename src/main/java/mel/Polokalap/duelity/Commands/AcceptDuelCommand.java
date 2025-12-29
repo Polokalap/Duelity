@@ -63,6 +63,9 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
         }
 
+        if (PlayerCache.inDuel.contains(player) || PlayerCache.preInDuel.contains(player)) return true;
+        if (PlayerCache.spectating.contains(player)) return true;
+
         if (PlayerCache.duelRequests.get(opponent) != null && PlayerCache.duelRequests.get(opponent).containsKey(player) || PlayerCache.duelOpponent.get(opponent) != null && PlayerCache.duelOpponent.get(opponent).equals(player)) {
 
             String kitName = PlayerCache.duelRequests.get(opponent).get(player);
@@ -104,6 +107,9 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
             PlayerCache.duelOpponent.put(player, opponent);
             PlayerCache.duelOpponent.put(opponent, player);
 
+            player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+            opponent.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+
             DuelManager.join(player);
             DuelManager.join(opponent);
 
@@ -126,7 +132,18 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
             PlayerCache.offset += 1500;
 
+            PlayerCache.preInDuel.add(player);
+            PlayerCache.preInDuel.add(opponent);
+
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+                opponent.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+
+                PlayerCache.preInDuel.remove(player);
+                PlayerCache.preInDuel.remove(opponent);
+                PlayerCache.inDuel.add(player);
+                PlayerCache.inDuel.add(opponent);
 
                 KitUtil.claimPlayerKit(kitName, player, player);
                 KitUtil.claimPlayerKit(kitName, opponent, opponent);

@@ -1,6 +1,5 @@
 package mel.Polokalap.duelity.Commands;
 
-import mel.Polokalap.duelity.GUI.DuelGUI;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
@@ -61,6 +60,8 @@ public class SpectateCommand implements CommandExecutor, TabCompleter {
 
         }
 
+        if (PlayerCache.spectating.contains(player)) return true;
+
         if (!PlayerCache.inDuel.contains(toSpectate)) {
 
             Sound.Error(player);
@@ -69,7 +70,7 @@ public class SpectateCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (PlayerCache.duelSpectators.get(toSpectate)) {
+        if (!PlayerCache.duelSpectators.get(toSpectate)) {
 
             Sound.Error(player);
             player.sendMessage(NewConfig.getString("spectate.disabled").replaceAll("%player%", toSpectate.getName()));

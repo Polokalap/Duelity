@@ -295,3 +295,4 @@ spectate:
   self: "&7You cannot spectate yourself!"
   not_in_duel: "&7%player% is not in duel!"
   disabled: "&7%player% disabled spectators"
+  in_spectator: "&7%player% is in spectator!"

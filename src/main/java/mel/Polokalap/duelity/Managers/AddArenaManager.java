@@ -20,6 +20,9 @@ public class AddArenaManager {
         new WorldUtil().makeEmptyWorld(player.getUniqueId() + "-arena_world", true);
         World world = Bukkit.getWorld(player.getUniqueId() + "-arena_world");
 
+        PlayerCache.editorPreGameMode.put(player, player.getGameMode());
+        PlayerCache.editorPreLocation.put(player, player.getLocation());
+
         player.teleport(new Location(world, 0, 100, 0));
         PlayerCache.playerWorld.put(player, world);
 
@@ -49,6 +52,10 @@ public class AddArenaManager {
         if (!PlayerCache.editingArena.contains(player)) return;
 
         PlayerCache.editingArena.remove(player);
+
+        player.teleport(PlayerCache.editorPreLocation.get(player));
+        player.setGameMode(PlayerCache.editorPreGameMode.get(player));
+
         WorldUtil.deleteWorldByWorld(PlayerCache.playerWorld.get(player));
         PlayerCache.worlds.remove(PlayerCache.playerWorld.get(player));
         PlayerCache.playerWorld.remove(player);
@@ -60,9 +67,9 @@ public class AddArenaManager {
         PlayerCache.regP.remove(player);
         PlayerCache.regS.remove(player);
         PlayerCache.settingArenaIcon.remove(player);
+        PlayerCache.editorPreGameMode.remove(player);
+        PlayerCache.editorPreLocation.remove(player);
         player.getInventory().clear();
-
-        player.setGameMode(GameMode.SURVIVAL);
 
         player.sendMessage(NewConfig.getString("arenas.world.quit"));
 

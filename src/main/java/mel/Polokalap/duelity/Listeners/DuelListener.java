@@ -17,7 +17,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -26,7 +25,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -38,10 +36,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DuelListener implements Listener {
 
@@ -128,6 +123,22 @@ public class DuelListener implements Listener {
 
                     if (opponent != null && opponent.isOnline()) {
 
+                        if (PlayerCache.spectating.contains(player)) {
+
+                            Sound.Error(player);
+                            player.sendMessage(NewConfig.getString("spectate.in_spectator").replaceAll("%player%", opponent.getName()));
+                            return;
+
+                        }
+
+                        if (PlayerCache.inDuel.contains(player) || PlayerCache.preInDuel.contains(player)) {
+
+                            Sound.Error(player);
+                            player.sendMessage(NewConfig.getString("duel.in_duel").replaceAll("%player%", opponent.getName()));
+                            return;
+
+                        }
+
                         HashMap<Player, String> request = new HashMap<>();
 
                         request.put(opponent, (String) kit.get("name"));
@@ -137,17 +148,17 @@ public class DuelListener implements Listener {
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
                             Player cachedOpponent = PlayerCache.duelOpponent.get(player);
-                            if (cachedOpponent == null) return;
+                            if (cachedOpponent == null || !cachedOpponent.equals(opponent)) return;
 
-                            if (!cachedOpponent.equals(opponent)) return;
-                            if (!PlayerCache.duelRequests.get(player).containsKey(cachedOpponent)) return;
+                            Map<Player, ?> requests = PlayerCache.duelRequests.get(player);
+                            if (requests == null || !requests.containsKey(cachedOpponent)) return;
 
                             if (player.isOnline()) {
-                                player.sendMessage(NewConfig.getString("duel.sender.expired").replaceAll("%player%", opponent.getName()));
+                                player.sendMessage(NewConfig.getString("duel.sender.expired").replace("%player%", opponent.getName()));
                             }
 
                             if (opponent.isOnline()) {
-                                opponent.sendMessage(NewConfig.getString("duel.receiver.expired").replaceAll("%player%", player.getName()));
+                                opponent.sendMessage(NewConfig.getString("duel.receiver.expired").replace("%player%", player.getName()));
                             }
 
                             PlayerCache.duelOpponent.remove(player);
@@ -233,7 +244,7 @@ public class DuelListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!PlayerCache.inDuel.contains(player)) return;
+        if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
 
         if (!event.getBlock().hasMetadata("player_placed")) event.setCancelled(true);
 
@@ -246,6 +257,13 @@ public class DuelListener implements Listener {
 
         if (!PlayerCache.inDuel.contains(player)) return;
 
+        if (PlayerCache.preInDuel.contains(player)) {
+
+            event.setCancelled(true);
+            return;
+
+        }
+
         event.getBlock().setMetadata("player_placed", new FixedMetadataValue(plugin, "player_placed"));
 
     }
@@ -255,7 +273,7 @@ public class DuelListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (PlayerCache.inDuel.contains(player)) DuelManager.leave(player, true, true);
+        if (PlayerCache.inDuel.contains(player) || PlayerCache.preInDuel.contains(player)) DuelManager.leave(player, true, true);
 
     }
 
@@ -313,9 +331,25 @@ public class DuelListener implements Listener {
                 .replaceAll("%max_health%", String.valueOf(opponent.getMaxHealth()))
         );
 
+        for (Player spectators : PlayerCache.spectating) {
+
+            if (!PlayerCache.spectatingPlayer.get(spectators).equals(player) && !PlayerCache.spectatingPlayer.get(spectators).equals(opponent)) return;
+
+            spectators.sendMessage(NewConfig.getStringCompiled("duel.round_message")
+                    .replaceAll("%player%", opponent.getName())
+                    .replaceAll("%blue_score%", String.valueOf(PlayerCache.duelBlueScores.get(blue)))
+                    .replaceAll("%red_score%", String.valueOf(PlayerCache.duelRedScores.get(red)))
+                    .replaceAll("%player_health%", String.valueOf(Math.round(opponent.getHealth() * 100.0) / 100.0))
+                    .replaceAll("%max_health%", String.valueOf(opponent.getMaxHealth()))
+            );
+
+        }
+
         if (PlayerCache.duelRedScores.get(opponent) >= rounds || PlayerCache.duelBlueScores.get(opponent) >= rounds) {
+
             DuelManager.end(player, opponent);
             return;
+
         }
 
         Sound.Won(opponent);
@@ -383,6 +417,9 @@ public class DuelListener implements Listener {
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
+                player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+                opponent.getActivePotionEffects().forEach(e -> opponent.removePotionEffect(e.getType()));
+
                 KitUtil.claimPlayerKit(kitName, player, player);
                 KitUtil.claimPlayerKit(kitName, opponent, opponent);
 
@@ -429,8 +466,9 @@ public class DuelListener implements Listener {
 
                 for (Player spectators : PlayerCache.spectating) {
 
-                    if (PlayerCache.spectatingPlayer.get(spectators) != null && PlayerCache.spectatingPlayer.get(spectators).equals(player)) spectators.teleport(player);
-                    if (PlayerCache.spectatingPlayer.get(spectators) != null && PlayerCache.spectatingPlayer.get(spectators).equals(opponent)) spectators.teleport(opponent);
+                    if (!PlayerCache.spectatingPlayer.get(spectators).equals(player) && !PlayerCache.spectatingPlayer.get(spectators).equals(opponent)) return;
+
+                    spectators.teleport(PlayerCache.spectatingPlayer.get(spectators));
 
                 }
 
@@ -504,6 +542,8 @@ public class DuelListener implements Listener {
                                         )
                                 );
 
+                                if (PlayerCache.duelEnd.get(player)) cancel();
+
                                 player.showTitle(timerTitle);
                                 opponent.showTitle(timerTitle);
 
@@ -515,6 +555,8 @@ public class DuelListener implements Listener {
                             countdown--;
 
                         }
+
+                        if (PlayerCache.duelEnd.get(player)) cancel();
 
                     }
 
@@ -531,7 +573,7 @@ public class DuelListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!PlayerCache.inDuel.contains(player)) return;
+        if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
 
         String message = event.getMessage();
 
@@ -548,7 +590,18 @@ public class DuelListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!PlayerCache.inDuel.contains(player)) return;
+        if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
+
+        event.setCancelled(true);
+
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerDropItemEvent event) {
+
+        Player player = event.getPlayer();
+
+        if (!PlayerCache.spectating.contains(player)) return;
 
         event.setCancelled(true);
 

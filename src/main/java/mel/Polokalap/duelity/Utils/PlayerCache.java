@@ -28,11 +28,12 @@ public class PlayerCache {
     public static HashMap<Player, World> playerWorld = new HashMap<>();
 
     public static ArrayList<Player> inDuel = new ArrayList<>();
+    public static ArrayList<Player> preInDuel = new ArrayList<>();
 
     public static HashMap<Player, Location> arenaBlue = new HashMap<>();
     public static HashMap<Player, Location> arenaRed = new HashMap<>();
 
-    public static ArrayList<Player> settingArenaIcon= new ArrayList<>();
+    public static ArrayList<Player> settingArenaIcon = new ArrayList<>();
     public static HashMap<Player, String> arenaName = new HashMap<>();
 
     public static HashMap<Player, String> editArenaName = new HashMap<>();
@@ -62,6 +63,9 @@ public class PlayerCache {
     public static HashMap<Player, Player> spectatingPlayer = new HashMap<>();
     public static HashMap<Player, Location> spectatePreLocation = new HashMap<>();
     public static HashMap<Player, GameMode> spectatePreGameMode = new HashMap<>();
+
+    public static HashMap<Player, GameMode> editorPreGameMode = new HashMap<>();
+    public static HashMap<Player, Location> editorPreLocation = new HashMap<>();
 
     public static int offset = 0;
 

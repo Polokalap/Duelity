@@ -62,7 +62,7 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (PlayerCache.inDuel.contains(opponent)) {
+        if (PlayerCache.inDuel.contains(opponent) || PlayerCache.preInDuel.contains(opponent)) {
 
             Sound.Error(player);
             player.sendMessage(NewConfig.getString("duel.in_duel").replaceAll("%player%", opponent.getName()));
@@ -74,6 +74,14 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
             Sound.Error(player);
             player.sendMessage(NewConfig.getString("duel.sent"));
+            return true;
+
+        }
+
+        if (PlayerCache.spectating.contains(player)) {
+
+            Sound.Error(player);
+            player.sendMessage(NewConfig.getString("spectate.in_spectator").replaceAll("%player%", opponent.getName()));
             return true;
 
         }
