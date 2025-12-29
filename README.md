@@ -1,7 +1,7 @@
 ## IMPORTANT! Plugin is WIP
 ![time](https://hackatime-badge.hackclub.com/U09C7CEA4JJ/Duelity?label=Duelity&color=orange)
 
-<img width="1080" height="1080" alt="image" src="https://github.com/user-attachments/assets/58001dd7-e0ca-4d9b-aa13-86229ed8590f" />
+<img width="128" alt="image" src="https://github.com/user-attachments/assets/58001dd7-e0ca-4d9b-aa13-86229ed8590f" />
 
 # Duelity is a Duel plugin made for HackClub Carnival, by Polokalap!
 
