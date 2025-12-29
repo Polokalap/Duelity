@@ -35,6 +35,8 @@ public class EditKitCommand implements CommandExecutor, TabCompleter {
 
         }
 
+        if (PlayerCache.inDuel.contains(player)) return true;
+
         if (args.length < 1) {
 
             Sound.Error(player);

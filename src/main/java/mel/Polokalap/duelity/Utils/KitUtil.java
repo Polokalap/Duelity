@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class KitUtil {
@@ -113,6 +112,36 @@ public class KitUtil {
         player.getInventory().clear();
 
         List<?> items = finalKit.getList("items");
+        int slot = 0;
+        int armorStart = items.size() - 5;
+
+        for (int i = 0; i < armorStart; i++) {
+
+            Object obj = items.get(i);
+
+            if (!(obj instanceof ItemStack item)) continue;
+
+            player.getInventory().setItem(slot++, item);
+
+        }
+
+        player.getInventory().setBoots((ItemStack) items.get(armorStart));
+        player.getInventory().setLeggings((ItemStack) items.get(armorStart + 1));
+        player.getInventory().setChestplate((ItemStack) items.get(armorStart + 2));
+        player.getInventory().setHelmet((ItemStack) items.get(armorStart + 3));
+
+        player.getInventory().setItemInOffHand((ItemStack) items.get(armorStart + 4));
+
+    }
+
+    public static void claimPlayerKit(String name, Player player, Player kit_holder) {
+
+        ConfigurationSection finalKit = getPlayerItems(name, kit_holder);
+
+        player.getInventory().clear();
+
+        List<?> items = finalKit.getList("items");
+
         int slot = 0;
         int armorStart = items.size() - 5;
 

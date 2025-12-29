@@ -1,7 +1,10 @@
 package mel.Polokalap.duelity.Utils;
 
 import mel.Polokalap.duelity.Main;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class ServerUtil {
 
@@ -29,5 +32,19 @@ public class ServerUtil {
         return check;
 
     }
+
+    public static void lookAt(Player from, Player to) {
+
+        Location fromLoc = from.getEyeLocation();
+        Location toLoc = to.getEyeLocation();
+
+        Vector direction = toLoc.toVector().subtract(fromLoc.toVector());
+        Location look = from.getLocation();
+
+        look.setDirection(direction);
+        from.teleport(look);
+
+    }
+
 
 }

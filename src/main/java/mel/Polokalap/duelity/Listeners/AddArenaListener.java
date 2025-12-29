@@ -3,10 +3,8 @@ package mel.Polokalap.duelity.Listeners;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Managers.AddArenaManager;
-import mel.Polokalap.duelity.Utils.NewConfig;
-import mel.Polokalap.duelity.Utils.PlayerCache;
-import mel.Polokalap.duelity.Utils.Sound;
-import mel.Polokalap.duelity.Utils.WorldEdit;
+import mel.Polokalap.duelity.Utils.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,7 +33,7 @@ public class AddArenaListener implements Listener {
 
         if (PlayerCache.editingArena.contains(player)) {
 
-            if (name.equals(NewConfig.getString("arenas.wand.name"))) {
+            if (ItemUtil.PDCHelper("arena_wand", item)) {
 
                 event.setCancelled(true);
                 Sound.Error(player);
@@ -70,18 +68,34 @@ public class AddArenaListener implements Listener {
 
                 arena.set("name", arenaName);
 
-                arena.set("blue.x", (int) PlayerCache.arenaBlue.get(player).getX() - PlayerCache.regP.get(player).getX());
-                arena.set("blue.y", (int) PlayerCache.arenaBlue.get(player).getY() - PlayerCache.regP.get(player).getY());
-                arena.set("blue.z", (int) PlayerCache.arenaBlue.get(player).getZ() - PlayerCache.regP.get(player).getZ());
+                Location origin1 = PlayerCache.regP.get(player);
+                Location origin2 = PlayerCache.regS.get(player);
+                Location blue = PlayerCache.arenaBlue.get(player);
+                Location red  = PlayerCache.arenaRed.get(player);
 
-                arena.set("red.x", (int) PlayerCache.arenaRed.get(player).getX() - PlayerCache.regP.get(player).getX());
-                arena.set("red.y", (int) PlayerCache.arenaRed.get(player).getY() - PlayerCache.regP.get(player).getY());
-                arena.set("red.z", (int) PlayerCache.arenaRed.get(player).getZ() - PlayerCache.regP.get(player).getZ());
+                double minX = Math.min(origin1.getX(), origin2.getX());
+                double minY = Math.min(origin1.getY(), origin2.getY());
+                double minZ = Math.min(origin1.getZ(), origin2.getZ());
+
+                Location corner = new Location(player.getWorld(), minX, minY, minZ);
+
+                arena.set("blue.x", blue.getX() - corner.getX());
+                arena.set("blue.y", blue.getY() - corner.getY());
+                arena.set("blue.z", blue.getZ() - corner.getZ());
+
+                arena.set("red.x", red.getX() - corner.getX());
+                arena.set("red.y", red.getY() - corner.getY());
+                arena.set("red.z", red.getZ() - corner.getZ());
 
                 arena.set("icon", item.getType().toString());
+
                 plugin.saveArenaConfig();
 
-                AddArenaManager.leave(player);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                        AddArenaManager.leave(player);
+
+                }, 5L);
 
             }
 
@@ -125,7 +139,7 @@ public class AddArenaListener implements Listener {
 
             String name = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 
-            if (name.equals(NewConfig.getString("arenas.wand.name"))) {
+            if (ItemUtil.PDCHelper("arena_wand", player.getInventory().getItemInMainHand())) {
 
                 event.setCancelled(true);
 
@@ -159,7 +173,7 @@ public class AddArenaListener implements Listener {
 
             String name = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 
-            if (name.equals(NewConfig.getString("arenas.wand.name"))) {
+            if (ItemUtil.PDCHelper("arena_wand", player.getInventory().getItemInMainHand())) {
 
                 if (PlayerCache.regS.containsKey(player) && PlayerCache.regS.get(player).equals(event.getClickedBlock().getLocation())) return;
 

@@ -1,5 +1,6 @@
 package mel.Polokalap.duelity.Utils;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerCache {
 
@@ -25,7 +27,7 @@ public class PlayerCache {
     public static ArrayList<Player> editingArena = new ArrayList<>();
     public static HashMap<Player, World> playerWorld = new HashMap<>();
 
-    public static HashMap<Player, Player> inDuel = new HashMap<>();
+    public static ArrayList<Player> inDuel = new ArrayList<>();
 
     public static HashMap<Player, Location> arenaBlue = new HashMap<>();
     public static HashMap<Player, Location> arenaRed = new HashMap<>();
@@ -43,9 +45,24 @@ public class PlayerCache {
     public static ArrayList<Player> inPlayerKitEditor = new ArrayList<>();
     public static HashMap<Player, ItemStack[]> playerInventory = new HashMap<>();
 
+    public static HashMap<Player, Map<Player, String>> duelRequests = new HashMap<>();
     public static HashMap<Player, Player> duelOpponent = new HashMap<>();
-    public static HashMap<Player, Boolean> duelAllowSpectators = new HashMap<>();
+    public static HashMap<Player, Teams> duelTeams = new HashMap<>();
+
+    public static HashMap<Player, Location> duelPreLocation = new HashMap<>();
+    public static HashMap<Player, GameMode> duelPreGameMode = new HashMap<>();
     public static HashMap<Player, Integer> duelRounds = new HashMap<>();
+    public static HashMap<Player, Boolean> duelSpectators = new HashMap<>();
+    public static HashMap<Player, Integer> duelBlueScores = new HashMap<>();
+    public static HashMap<Player, Integer> duelRedScores = new HashMap<>();
     public static HashMap<Player, String> duelKit = new HashMap<>();
+    public static HashMap<Player, Boolean> duelEnd = new HashMap<>();
+
+    public static ArrayList<Player> spectating = new ArrayList<>();
+    public static HashMap<Player, Player> spectatingPlayer = new HashMap<>();
+    public static HashMap<Player, Location> spectatePreLocation = new HashMap<>();
+    public static HashMap<Player, GameMode> spectatePreGameMode = new HashMap<>();
+
+    public static int offset = 0;
 
 }

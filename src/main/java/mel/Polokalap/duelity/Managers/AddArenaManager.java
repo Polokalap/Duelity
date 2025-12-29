@@ -1,6 +1,7 @@
 package mel.Polokalap.duelity.Managers;
 
 import mel.Polokalap.duelity.Listeners.GUIListener;
+import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.WorldUtil;
@@ -33,6 +34,8 @@ public class AddArenaManager {
         wandMeta.setDisplayName(NewConfig.getString("arenas.wand.name"));
         wandMeta.setLore(NewConfig.getStringList("arenas.wand.lore"));
 
+        ItemUtil.assignPDC("arena_wand", wandMeta);
+
         wand.setItemMeta(wandMeta);
 
         player.getInventory().addItem(wand);
@@ -56,6 +59,7 @@ public class AddArenaManager {
         PlayerCache.editingArena.remove(player);
         PlayerCache.regP.remove(player);
         PlayerCache.regS.remove(player);
+        PlayerCache.settingArenaIcon.remove(player);
         player.getInventory().clear();
 
         player.setGameMode(GameMode.SURVIVAL);

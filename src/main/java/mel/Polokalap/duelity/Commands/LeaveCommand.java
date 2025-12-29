@@ -1,6 +1,7 @@
 package mel.Polokalap.duelity.Commands;
 
 import mel.Polokalap.duelity.Managers.AddArenaManager;
+import mel.Polokalap.duelity.Managers.DuelManager;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import org.bukkit.command.Command;
@@ -31,9 +32,19 @@ public class LeaveCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (PlayerCache.inDuel.containsKey(player)) {
+        if (PlayerCache.inDuel.contains(player)) {
 
-            // TODO: Duel managerből kilépteti
+            DuelManager.leave(player, true, false);
+
+        }
+
+        if (PlayerCache.spectating.contains(player)) {
+
+            player.teleport(PlayerCache.spectatePreLocation.get(player));
+            player.setGameMode(PlayerCache.spectatePreGameMode.get(player));
+
+            PlayerCache.spectating.remove(player);
+            PlayerCache.spectatingPlayer.remove(player);
 
         }
 

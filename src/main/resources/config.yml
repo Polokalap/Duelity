@@ -222,6 +222,38 @@ duel:
   offline: "&7%player% is not online!"
   self: "&7You can't invite yourself!"
   color: "&9"
+  sent: "&7You have already sent a duel request to that player!"
+  no_sent_invite: "&7You haven't invited this player yet!"
+  request_cancelled: "&7Your duel request has been cancelled for %player%!"
+  no_invite: "&7You don't have a duel request by %player%!"
+  declined: "&7You have declined your duel request from %player%!"
+  in_duel: "&7%player% is already in a duel!"
+  left:
+    title: "&e%player% left!"
+    subtitle: "&6Returning you to the lobby..."
+  left_player:
+    title: "&eYou left!"
+    subtitle: "&6Returning you to the lobby..."
+  countdown:
+    title: "&e%time%"
+    subtitle: "&9%blue_score% &7| &c%red_score% &7(first to %rounds%)"
+  end:
+    title: "&cDuel has ended!"
+    subtitle: "&e%player% &6won"
+  duel_start:
+    title: " "
+    subtitle: "&eGood luck!"
+  round_message:
+    - "&8&l----------------------------------------"
+    - "&7(&9%blue_score% &8- &c%red_score%&7) &8%player% &7won the duel!"
+    - "&c❤ %player_health%/%max_health%"
+    - "&8&l----------------------------------------"
+  sender:
+    expired: "&7Your duel request to %player% has expired!"
+  receiver:
+    expired: "&7Your duel request from %player% has expired!"
+  duel_timeout: 120
+  accepted: "&eDuel accepted!"
   gui:
     spectate:
       name: "&eEnable spectators: %state%"
@@ -233,3 +265,33 @@ duel:
       lore:
         - "&fThe rounds someone has to win"
         - "&fto end the duel."
+  message:
+    receiver:
+      - "<gradient:#8F8F8F:#D4D4D4><bold>=================================================</gradient>"
+      - "<white><player> <grey>has sent you a duel request!"
+      - "<accept> <decline> <information>"
+      - "<gradient:#8F8F8F:#D4D4D4><bold>=================================================</gradient>"
+    sender:
+      - "<gold>Your duel request has been sent! <cancel>"
+    accept:
+      text: "&7[&a✔ Accept&7]"
+      hover: "&aClick here to accept the the duel request!"
+    decline:
+      text: "&7[&4❌&7]"
+      hover: "&cClick here to decline the duel request!"
+    cancel:
+      text: "&7[&4❌&7]"
+      hover: "&cClick here to cancel the duel request!"
+    information:
+      text: "&e[📘]"
+      hover:
+        - "&7⚜ &9ᴏᴘᴘᴏɴᴇɴᴛ: ẞopponent"
+        - "&7ⓘ &bᴋɪᴛ: ẞkit"
+        - "&7ℹ &eғɪʀsᴛ ᴛᴏ: ẞrounds"
+        - "&7☢ &dsᴘᴇᴄᴛᴀᴛᴏʀs: ẞspectators"
+
+spectate:
+  offline: "&7%player% is not online!"
+  self: "&7You cannot spectate yourself!"
+  not_in_duel: "&7%player% is not in duel!"
+  disabled: "&7%player% disabled spectators"

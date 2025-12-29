@@ -21,6 +21,16 @@ commands:
     description: "Edit your kits in Duelity!"
   "duel":
     description: "Duel someone in Duelity!"
+  "cancelduel":
+    description: "Cancel a duel request that was sent in Duelity!"
+  "declineduel":
+    description: "Decline a duel request in Duelity!"
+  "acceptduel":
+    description: "Accept a duel in Duelity!"
+  "spectate":
+    description: "Spectate a player who is dueling in Duelity!"
+    aliases:
+      - "spec"
 permissions:
   duelity.admin:
     default: op

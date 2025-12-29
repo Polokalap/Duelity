@@ -129,6 +129,14 @@ public class GUIListener implements Listener {
             if (ItemUtil.PDCHelper("kits_add_name", item)) {
 
                 new AddKitGUI().openGUI(player);
+                PlayerCache.tempName.remove(player);
+                PlayerCache.tempIcon.remove(player);
+                PlayerCache.tempKit.remove(player);
+                PlayerCache.tempHp.remove(player);
+                PlayerCache.tempGamemode.remove(player);
+                PlayerCache.selectedArenas.remove(player);
+                PlayerCache.editingKit.remove(player);
+                GUIListener.addingKit.remove(player);
 
             }
 

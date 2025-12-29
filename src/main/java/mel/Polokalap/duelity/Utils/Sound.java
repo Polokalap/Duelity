@@ -46,4 +46,22 @@ public class Sound {
 
     }
 
+    public static void Start(Player player) {
+
+        player.playSound(player, org.bukkit.Sound.UI_LOOM_TAKE_RESULT, 0.5f, 0.7f);
+
+    }
+
+    public static void Quit(Player player) {
+
+        player.playSound(player, org.bukkit.Sound.BLOCK_ENDER_CHEST_CLOSE, 0.5f, 0.8f);
+
+    }
+
+    public static void Won(Player player) {
+
+        player.playSound(player, org.bukkit.Sound.BLOCK_NOTE_BLOCK_BELL, 0.5f, 1.5f);
+
+    }
+
 }

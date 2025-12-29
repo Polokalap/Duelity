@@ -1,6 +1,5 @@
 package mel.Polokalap.duelity.Commands;
 
-import mel.Polokalap.duelity.GUI.DuelGUI;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DuelCommand implements CommandExecutor, TabCompleter {
+public class DeclineDuelCommand implements CommandExecutor, TabCompleter {
 
     Main plugin = Main.getInstance();
     FileConfiguration config = plugin.getConfig();
@@ -46,14 +45,6 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
         Player opponent = Bukkit.getPlayerExact(args[0]);
 
-        if (opponent == null || !opponent.isOnline()) {
-
-            Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.offline").replaceAll("%player%", args[0]));
-            return true;
-
-        }
-
         if (opponent.getUniqueId().equals(player.getUniqueId())) {
 
             Sound.Error(player);
@@ -62,25 +53,21 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (PlayerCache.inDuel.contains(opponent)) {
+        if (PlayerCache.duelRequests.get(opponent) != null && PlayerCache.duelRequests.get(opponent).containsKey(player)) {
 
-            Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.in_duel").replaceAll("%player%", opponent.getName()));
+            PlayerCache.duelOpponent.remove(opponent);
+            PlayerCache.duelRequests.remove(opponent);
+
+            opponent.sendMessage(NewConfig.getString("duel.request_cancelled").replaceAll("%player%", player.getName()));
+
+            player.sendMessage(NewConfig.getString("duel.declined").replaceAll("%player%", opponent.getName()));
+
             return true;
 
         }
 
-        if (PlayerCache.duelRequests.get(player) != null && PlayerCache.duelRequests.get(player).containsKey(opponent)) {
-
-            Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.sent"));
-            return true;
-
-        }
-
-        PlayerCache.duelOpponent.put(player, opponent);
-
-        new DuelGUI().openGUI(player);
+        Sound.Error(player);
+        player.sendMessage(NewConfig.getString("duel.no_sent_invite"));
 
         return true;
 

@@ -6,6 +6,7 @@ import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DuelCommand implements CommandExecutor, TabCompleter {
+public class SpectateCommand implements CommandExecutor, TabCompleter {
 
     Main plugin = Main.getInstance();
     FileConfiguration config = plugin.getConfig();
@@ -34,8 +35,6 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (PlayerCache.inDuel.contains(player)) return true;
-
         if (args.length < 1) {
 
             Sound.Error(player);
@@ -44,43 +43,47 @@ public class DuelCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        Player opponent = Bukkit.getPlayerExact(args[0]);
+        Player toSpectate = Bukkit.getPlayerExact(args[0]);
 
-        if (opponent == null || !opponent.isOnline()) {
+        if (toSpectate == null || !toSpectate.isOnline()) {
 
             Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.offline").replaceAll("%player%", args[0]));
+            player.sendMessage(NewConfig.getString("spectate.offline").replaceAll("%player%", args[0]));
             return true;
 
         }
 
-        if (opponent.getUniqueId().equals(player.getUniqueId())) {
+        if (toSpectate.getUniqueId().equals(player.getUniqueId())) {
 
             Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.self"));
+            player.sendMessage(NewConfig.getString("spectate.self"));
             return true;
 
         }
 
-        if (PlayerCache.inDuel.contains(opponent)) {
+        if (!PlayerCache.inDuel.contains(toSpectate)) {
 
             Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.in_duel").replaceAll("%player%", opponent.getName()));
+            player.sendMessage(NewConfig.getString("spectate.not_in_duel").replaceAll("%player%", toSpectate.getName()));
             return true;
 
         }
 
-        if (PlayerCache.duelRequests.get(player) != null && PlayerCache.duelRequests.get(player).containsKey(opponent)) {
+        if (PlayerCache.duelSpectators.get(toSpectate)) {
 
             Sound.Error(player);
-            player.sendMessage(NewConfig.getString("duel.sent"));
+            player.sendMessage(NewConfig.getString("spectate.disabled").replaceAll("%player%", toSpectate.getName()));
             return true;
 
         }
 
-        PlayerCache.duelOpponent.put(player, opponent);
+        PlayerCache.spectatePreGameMode.put(player, player.getGameMode());
+        PlayerCache.spectatePreLocation.put(player, player.getLocation());
+        PlayerCache.spectating.add(player);
+        PlayerCache.spectatingPlayer.put(player, toSpectate);
 
-        new DuelGUI().openGUI(player);
+        player.setGameMode(GameMode.SPECTATOR);
+        player.teleport(toSpectate);
 
         return true;
 

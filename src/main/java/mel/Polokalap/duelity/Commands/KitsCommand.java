@@ -45,7 +45,6 @@ public class KitsCommand implements CommandExecutor, TabCompleter {
         PlayerCache.selectedArenas.remove(player);
         PlayerCache.editingKit.remove(player);
         GUIListener.addingKit.remove(player);
-        GUIListener.addingKit.remove(player);
 
         return true;
 
