@@ -90,6 +90,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EditKitGUIListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerKitEditorGUIListener(), this);
         getServer().getPluginManager().registerEvents(new DuelListener(), this);
+        getServer().getPluginManager().registerEvents(new SpectatorListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
         getCommand("#setup").setTabCompleter(new SetupCommand());

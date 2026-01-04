@@ -27,6 +27,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -591,17 +592,6 @@ public class DuelListener implements Listener {
         Player player = event.getPlayer();
 
         if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
-
-        event.setCancelled(true);
-
-    }
-
-    @EventHandler
-    public void onTeleport(PlayerDropItemEvent event) {
-
-        Player player = event.getPlayer();
-
-        if (!PlayerCache.spectating.contains(player)) return;
 
         event.setCancelled(true);
 
