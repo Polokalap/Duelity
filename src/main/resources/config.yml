@@ -8,6 +8,7 @@ console:
 settings:
   setup: false
   duel_server: true
+  difficulty: "HARD"
 
 player:
   y: "&aYes"
@@ -42,6 +43,12 @@ setup:
     done: "ẞprefix Config saved! Remember: You can always edit it using &6/#setup start &for via the &6config.yml &ffile!"
     lore:
       - "&fClick here to save the config!"
+  difficulty:
+    name: "&fSelect Duel difficulty"
+  difficulties:
+    - "ẞa Easy"
+    - "ẞb Normal"
+    - "ẞc Hard"
 
 kits:
   name: "&aManage kits"

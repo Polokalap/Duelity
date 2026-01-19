@@ -1,9 +1,6 @@
 package mel.Polokalap.duelity.Utils;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -66,6 +63,8 @@ public class PlayerCache {
 
     public static HashMap<Player, GameMode> editorPreGameMode = new HashMap<>();
     public static HashMap<Player, Location> editorPreLocation = new HashMap<>();
+
+    public static HashMap<Player, Difficulty> tempDifficulty = new HashMap<>();
 
     public static int offset = 0;
 

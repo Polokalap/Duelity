@@ -1,7 +1,10 @@
 package mel.Polokalap.duelity.GUI;
 
+import mel.Polokalap.duelity.Utils.Gamemodes;
 import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
+import mel.Polokalap.duelity.Utils.PlayerCache;
+import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +33,7 @@ public class SetupGUI extends GUI {
 
         duelServer.setItemMeta(duelMeta);
 
-        menu.setItem(11, duelServer);
+        menu.setItem(0, duelServer);
 
         ItemStack spawnItem = new ItemStack(Material.CLOCK);
         ItemMeta spawnMeta = spawnItem.getItemMeta();
@@ -43,7 +46,7 @@ public class SetupGUI extends GUI {
 
         spawnItem.setItemMeta(spawnMeta);
 
-        menu.setItem(13, spawnItem);
+        menu.setItem(1, spawnItem);
 
         ItemStack saveItem = new ItemStack(Material.LIME_CONCRETE);
         ItemMeta saveMeta = saveItem.getItemMeta();
@@ -56,7 +59,24 @@ public class SetupGUI extends GUI {
 
         saveItem.setItemMeta(saveMeta);
 
-        menu.setItem(15, saveItem);
+        menu.setItem(2, saveItem);
+
+        ItemStack difficultyItem = new ItemStack(Material.FEATHER);
+        ItemMeta difficultyMeta = difficultyItem.getItemMeta();
+
+        difficultyMeta.setDisplayName(NewConfig.getString("setup.save.name"));
+
+        ItemUtil.assignPDC("setup_difficulty_name", difficultyMeta);
+
+        difficultyMeta.setLore(List.of(
+                NewConfig.getStringList("setup.difficulties").get(0).replaceAll("ẞa", PlayerCache.tempDifficulty.get(player) == Difficulty.EASY ? "§a§u" : "§7"),
+                NewConfig.getStringList("setup.difficulties").get(1).replaceAll("ẞb", PlayerCache.tempDifficulty.get(player) == Difficulty.NORMAL ? "§a§u" : "§7"),
+                NewConfig.getStringList("setup.difficulties").get(2).replaceAll("ẞc", PlayerCache.tempDifficulty.get(player) == Difficulty.HARD ? "§a§u" : "§7")
+        ));
+
+        difficultyItem.setItemMeta(difficultyMeta);
+
+        menu.setItem(3, difficultyItem);
 
     }
 

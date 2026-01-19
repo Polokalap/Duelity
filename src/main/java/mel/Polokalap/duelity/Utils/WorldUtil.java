@@ -32,7 +32,7 @@ public class WorldUtil extends ChunkGenerator {
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setGameRule(GameRule.DO_ENTITY_DROPS, false);
-        world.setGameRule(GameRule.FIRE_DAMAGE, false);
+
         world.setGameRule(GameRule.FALL_DAMAGE, false);
         world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         world.setGameRule(GameRule.DO_MOB_LOOT, false);
@@ -43,7 +43,7 @@ public class WorldUtil extends ChunkGenerator {
         world.setTime(6000);
 
         world.setViewDistance(4);
-        world.setDifficulty(Difficulty.HARD);
+        world.setDifficulty(Difficulty.valueOf(config.getString("settings.difficulty")));
 
         Location spawn = new Location(world, 0, 100, 0);
 

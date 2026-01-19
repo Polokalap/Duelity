@@ -4,9 +4,8 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import mel.Polokalap.duelity.GUI.*;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Utils.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import mel.Polokalap.duelity.Utils.Sound;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -160,6 +159,35 @@ public class GUIListener implements Listener {
                     }
 
                 }.runTaskTimer(plugin, 0L, 40L);
+
+            }
+
+            if (ItemUtil.PDCHelper("setup_difficulty_name", item)) {
+
+                Sound.Click(player);
+
+                if (PlayerCache.tempDifficulty.get(player) == Difficulty.HARD) PlayerCache.tempDifficulty.put(player, Difficulty.EASY);
+                else if (PlayerCache.tempDifficulty.get(player) == Difficulty.EASY) PlayerCache.tempDifficulty.put(player, Difficulty.NORMAL);
+                else PlayerCache.tempDifficulty.put(player, Difficulty.HARD);
+
+                ItemMeta itemMeta = item.getItemMeta();
+
+                itemMeta.setLore(List.of(
+                        NewConfig.getStringList("setup.difficulties").get(0).replaceAll("ẞa", PlayerCache.tempDifficulty.get(player) == Difficulty.EASY ? "§a§u" : "§7"),
+                        NewConfig.getStringList("setup.difficulties").get(1).replaceAll("ẞb", PlayerCache.tempDifficulty.get(player) == Difficulty.NORMAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("setup.difficulties").get(2).replaceAll("ẞc", PlayerCache.tempDifficulty.get(player) == Difficulty.HARD ? "§a§u" : "§7")
+                ));
+
+                item.setItemMeta(itemMeta);
+
+                config.set("settings.difficulty", PlayerCache.tempDifficulty.get(player).toString());
+                plugin.saveConfig();
+
+                for (World world : PlayerCache.worlds) {
+
+                    world.setDifficulty(Difficulty.valueOf(config.getString("settings.difficulty")));
+
+                }
 
             }
 
