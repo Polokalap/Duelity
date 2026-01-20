@@ -65,6 +65,8 @@ public class PlayerCache {
     public static HashMap<Player, Location> editorPreLocation = new HashMap<>();
 
     public static HashMap<Player, Difficulty> tempDifficulty = new HashMap<>();
+    public static ArrayList<Player> canSkip = new ArrayList<>();
+    public static ArrayList<Player> skipped = new ArrayList<>();
 
     public static int offset = 0;
 

@@ -6,9 +6,9 @@ console:
   player: "You *MUST* be a player to run this command!"
 
 settings:
-  setup: false
   duel_server: true
   difficulty: "HARD"
+  skip: true
 
 player:
   y: "&aYes"
@@ -19,36 +19,30 @@ player:
   "off": "&7[&4❌&7]"
 
 admin:
-  setup_incomplete:
-    - "&c------------------------------------"
-    - "&fYour &lDuelity &r&fsetup is incomplete!"
-    - "&fDo /#setup start to set up the plugin!"
-    - "&c------------------------------------"
   kit_editor_alert: "&e&lWARNING: &r&cPlayer &4%player% &ctried to put an illegal item into a kit!"
 
-setup:
-  name: "&aSetup Duelity"
+settings_menu:
+  name: "&aDuelity Settings"
   duel:
     name: "&aIs this a duel server?"
     lore:
       - "&fCurrently: ẞanswer"
   spawn:
     name: "&aSet spawn"
-    close: "ßprefix Go to the spawn location, then type \"done\" in chat"
+    close: "ẞprefix Go to the spawn location, then type \"done\" in chat"
     action_bar: "Type \"done\" when you are done!"
     lore:
       - "&fClick here to set the spawn location"
-  save:
-    name: "&aComplete setup"
-    done: "ẞprefix Config saved! Remember: You can always edit it using &6/#setup start &for via the &6config.yml &ffile!"
-    lore:
-      - "&fClick here to save the config!"
   difficulty:
-    name: "&fSelect Duel difficulty"
+    name: "&aSelect Duel difficulty"
   difficulties:
     - "ẞa Easy"
     - "ẞb Normal"
     - "ẞc Hard"
+  skip:
+    name: "&aPlayers can skip duels"
+    lore:
+      - "&fCurrently: ẞanswer"
 
 kits:
   name: "&aManage kits"
@@ -235,6 +229,8 @@ duel:
   no_invite: "&7You don't have a duel request by %player%!"
   declined: "&7You have declined your duel request from %player%!"
   in_duel: "&7%player% is already in a duel!"
+  skip: "&7(&fSneak to skip: ẞstatus&7)"
+  skipped: "ẞplayer &fis ready to fight!"
   left:
     title: "&e%player% left!"
     subtitle: "&6Returning you to the lobby..."

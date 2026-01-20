@@ -75,18 +75,29 @@ public class GUIListener implements Listener {
 
             now.put(player, System.currentTimeMillis());
 
-            if (ItemUtil.PDCHelper("setup_duel_name", item)) {
+            if (ItemUtil.PDCHelper("settings_menu_duel_name", item)) {
 
                 Sound.Click(player);
 
                 config.set("settings.duel_server", !config.getBoolean("settings.duel_server"));
                 plugin.saveConfig();
 
-                item.setLore(List.of(NewConfig.getStringCompiled("setup.duel.lore").replaceAll("ẞanswer", config.getBoolean("settings.duel_server") ? NewConfig.getString("player.y") : NewConfig.getString("player.n"))));
+                item.setLore(List.of(NewConfig.getStringCompiled("settings_menu.duel.lore").replaceAll("ẞanswer", config.getBoolean("settings.duel_server") ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
 
             }
 
-            if (ItemUtil.PDCHelper("setup_spawn_name", item)) {
+            if (ItemUtil.PDCHelper("settings_menu_skip_name", item)) {
+
+                Sound.Click(player);
+
+                config.set("settings.skip", !config.getBoolean("settings.skip"));
+                plugin.saveConfig();
+
+                item.setLore(List.of(NewConfig.getStringCompiled("settings_menu.skip.lore").replaceAll("ẞanswer", config.getBoolean("settings.skip") ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+
+            }
+
+            if (ItemUtil.PDCHelper("settings_menu_spawn_name", item)) {
 
                 Sound.Click(player);
                 player.closeInventory();
@@ -94,7 +105,7 @@ public class GUIListener implements Listener {
                 muteChat.add(player);
                 settingSpawn.add(player);
 
-                player.sendMessage(NewConfig.getString("setup.spawn.close"));
+                player.sendMessage(NewConfig.getString("settings_menu.spawn.close"));
 
                 new BukkitRunnable() {
 
@@ -103,25 +114,13 @@ public class GUIListener implements Listener {
 
                         if (!settingSpawn.contains(player)) cancel();
 
-                        player.sendActionBar("§a" + NewConfig.getString("setup.spawn.action_bar"));
+                        player.sendActionBar("§a" + NewConfig.getString("settings_menu.spawn.action_bar"));
 
                         if (!settingSpawn.contains(player)) player.sendActionBar(" ");
 
                     }
 
                 }.runTaskTimer(plugin, 0L, 40L);
-
-            }
-
-            if (ItemUtil.PDCHelper("setup_save_name", item)) {
-
-                player.sendMessage(NewConfig.getString("setup.save.done"));
-                player.closeInventory();
-                Sound.Ping(player);
-
-                config.set("settings.setup", true);
-
-                plugin.saveConfig();
 
             }
 
@@ -162,7 +161,7 @@ public class GUIListener implements Listener {
 
             }
 
-            if (ItemUtil.PDCHelper("setup_difficulty_name", item)) {
+            if (ItemUtil.PDCHelper("settings_menu_difficulty_name", item)) {
 
                 Sound.Click(player);
 
@@ -173,9 +172,9 @@ public class GUIListener implements Listener {
                 ItemMeta itemMeta = item.getItemMeta();
 
                 itemMeta.setLore(List.of(
-                        NewConfig.getStringList("setup.difficulties").get(0).replaceAll("ẞa", PlayerCache.tempDifficulty.get(player) == Difficulty.EASY ? "§a§u" : "§7"),
-                        NewConfig.getStringList("setup.difficulties").get(1).replaceAll("ẞb", PlayerCache.tempDifficulty.get(player) == Difficulty.NORMAL ? "§a§u" : "§7"),
-                        NewConfig.getStringList("setup.difficulties").get(2).replaceAll("ẞc", PlayerCache.tempDifficulty.get(player) == Difficulty.HARD ? "§a§u" : "§7")
+                        NewConfig.getStringList("settings_menu.difficulties").get(0).replaceAll("ẞa", PlayerCache.tempDifficulty.get(player) == Difficulty.EASY ? "§a§u" : "§7"),
+                        NewConfig.getStringList("settings_menu.difficulties").get(1).replaceAll("ẞb", PlayerCache.tempDifficulty.get(player) == Difficulty.NORMAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("settings_menu.difficulties").get(2).replaceAll("ẞc", PlayerCache.tempDifficulty.get(player) == Difficulty.HARD ? "§a§u" : "§7")
                 ));
 
                 item.setItemMeta(itemMeta);
@@ -665,7 +664,7 @@ public class GUIListener implements Listener {
                     Location loc = player.getLocation();
 
                     player.sendActionBar(" ");
-                    new SetupGUI().openGUI(player);
+                    new SettingsGUI().openGUI(player);
 
                     config.set("settings.spawn", loc);
                     plugin.saveConfig();
@@ -677,7 +676,7 @@ public class GUIListener implements Listener {
             }
 
             Sound.Error(player);
-            player.sendActionBar("§c" + NewConfig.getString("setup.spawn.action_bar"));
+            player.sendActionBar("§c" + NewConfig.getString("settings_menu.spawn.action_bar"));
 
         }
 

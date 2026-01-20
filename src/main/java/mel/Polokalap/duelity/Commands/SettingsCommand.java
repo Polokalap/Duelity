@@ -1,6 +1,6 @@
 package mel.Polokalap.duelity.Commands;
 
-import mel.Polokalap.duelity.GUI.SetupGUI;
+import mel.Polokalap.duelity.GUI.SettingsGUI;
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SetupCommand implements CommandExecutor, TabCompleter {
+public class SettingsCommand implements CommandExecutor, TabCompleter {
 
     private Main plugin = Main.getInstance();
     private FileConfiguration config = plugin.getConfig();
@@ -40,30 +40,9 @@ public class SetupCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        if (args.length == 0) {
+        PlayerCache.tempDifficulty.put(player, Difficulty.valueOf(config.getString("settings.difficulty")));
 
-            player.sendMessage(NewConfig.getString("player.args"));
-            return true;
-
-        }
-
-        switch (args[0].toLowerCase()) {
-
-            case "start":
-
-                PlayerCache.tempDifficulty.put(player, Difficulty.valueOf(config.getString("settings.difficulty")));
-
-                new SetupGUI().openGUI(player);
-
-                break;
-
-            default:
-
-                player.sendMessage(NewConfig.getString("player.args"));
-
-                break;
-
-        }
+        new SettingsGUI().openGUI(player);
 
         return true;
 
@@ -72,17 +51,7 @@ public class SetupCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
 
-        if (!sender.hasPermission("duelity.admin")) return List.of();
-
-        switch (args.length) {
-
-            case 1:
-                return List.of("start");
-
-            default:
-                return List.of();
-
-        }
+        return List.of();
 
     }
 

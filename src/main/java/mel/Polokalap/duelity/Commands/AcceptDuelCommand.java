@@ -25,7 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
@@ -101,20 +103,23 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
             }
 
+            player.setInvulnerable(true);
+            opponent.setInvulnerable(true);
+
             PlayerCache.duelKit.put(player, kitName);
             PlayerCache.duelKit.put(opponent, kitName);
             PlayerCache.duelRequests.remove(opponent);
             PlayerCache.duelOpponent.put(player, opponent);
             PlayerCache.duelOpponent.put(opponent, player);
 
+            PlayerCache.skipped.remove(player);
+            PlayerCache.skipped.remove(opponent);
+
             player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
             opponent.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
 
             DuelManager.join(player);
             DuelManager.join(opponent);
-
-            player.setInvulnerable(true);
-            opponent.setInvulnerable(true);
 
             PlayerCache.duelPreLocation.put(player, player.getLocation());
             PlayerCache.duelPreLocation.put(opponent, opponent.getLocation());
@@ -174,6 +179,59 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
                 player.teleport(blueSpawn);
                 opponent.teleport(redSpawn);
 
+                PlayerCache.canSkip.add(player);
+                PlayerCache.canSkip.add(opponent);
+
+                boolean[] instantStart = { false };
+
+                new BukkitRunnable() {
+
+                    int countdown = 5;
+
+                    @Override
+                    public void run() {
+
+                        if (countdown < 0) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            PlayerCache.canSkip.remove(player);
+                            PlayerCache.canSkip.remove(opponent);
+                            cancel();
+                            return;
+
+                        }
+
+                        if (!PlayerCache.canSkip.contains(player) || !PlayerCache.canSkip.contains(opponent)) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            Sound.Won(player);
+                            Sound.Won(opponent);
+                            cancel();
+                            return;
+
+                        }
+
+                        if (PlayerCache.skipped.contains(player) && PlayerCache.skipped.contains(opponent)) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            instantStart[0] = true;
+                            cancel();
+                            return;
+
+                        }
+
+                        player.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+                        opponent.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(opponent) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+
+                        countdown--;
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 20L);
+
                 PlayerCache.duelTeams.put(player, Teams.BLUE);
                 PlayerCache.duelTeams.put(opponent, Teams.RED);
 
@@ -203,7 +261,7 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
                         if (PlayerCache.duelEnd.get(player)) cancel();
 
-                        if (countdown <= 0) {
+                        if (countdown <= 0 || instantStart[0]) {
 
                             Title timerTitle = Title.title(
                                     Component.text(NewConfig.getString("duel.duel_start.title")),
@@ -217,6 +275,9 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
 
                             player.showTitle(timerTitle);
                             opponent.showTitle(timerTitle);
+
+                            PlayerCache.skipped.remove(player);
+                            PlayerCache.skipped.remove(opponent);
 
                             Sound.Ping(player);
                             Sound.Ping(opponent);

@@ -7,8 +7,8 @@ authors: [ Polokalap ]
 website: autizm.us/m, ko-fi.com/Polokalap
 description: "A simple duel plugin"
 commands:
-  "#setup":
-    description: "Setup for Duelity"
+  "#settings":
+    description: "Settings for Duelity"
   "#kits":
     description: "Manage kits for Duelity"
   "#arenas":
@@ -34,4 +34,4 @@ commands:
 permissions:
   duelity.admin:
     default: op
-    description: "This permission gives access to the Duelity config and setup."
+    description: "This permission gives access to the Duelity config."

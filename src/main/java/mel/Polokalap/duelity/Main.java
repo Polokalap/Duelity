@@ -70,7 +70,7 @@ public final class Main extends JavaPlugin {
     private void register_stuff() {
 
         // Command: getCommand("command").setExecutor(new Class());
-        getCommand("#setup").setExecutor(new SetupCommand());
+        getCommand("#settings").setExecutor(new SettingsCommand());
         getCommand("#kits").setExecutor(new KitsCommand());
 //        getCommand("#wetest").setExecutor(new WorldEditTestCommand());
         getCommand("#arenas").setExecutor(new ArenasCommand());
@@ -93,7 +93,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SpectatorListener(), this);
 
         // getCommand("command").setTabCompleter(new Class());
-        getCommand("#setup").setTabCompleter(new SetupCommand());
+        getCommand("#settings").setTabCompleter(new SettingsCommand());
         getCommand("#kits").setTabCompleter(new KitsCommand());
 //        getCommand("#wetest").setTabCompleter(new WorldEditTestCommand());
         getCommand("#arenas").setTabCompleter(new ArenasCommand());

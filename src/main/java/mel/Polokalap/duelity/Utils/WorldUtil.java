@@ -33,7 +33,6 @@ public class WorldUtil extends ChunkGenerator {
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setGameRule(GameRule.DO_ENTITY_DROPS, false);
 
-        world.setGameRule(GameRule.FALL_DAMAGE, false);
         world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         world.setGameRule(GameRule.DO_MOB_LOOT, false);
         world.setGameRule(GameRule.MOB_GRIEFING, false);
@@ -43,7 +42,7 @@ public class WorldUtil extends ChunkGenerator {
         world.setTime(6000);
 
         world.setViewDistance(4);
-        world.setDifficulty(Difficulty.valueOf(config.getString("settings.difficulty")));
+        world.setDifficulty(Difficulty.valueOf(config.getString("settings.difficulty", "HARD")));
 
         Location spawn = new Location(world, 0, 100, 0);
 
@@ -54,35 +53,6 @@ public class WorldUtil extends ChunkGenerator {
         // Bukkit.getScheduler().runTaskLater(plugin, () -> WorldEdit.placeSchem(spawn, "test"), 1L);
 
         PlayerCache.worlds.add(world);
-
-    }
-
-    public static void deleteWorld(String name) {
-
-        World world = Bukkit.getWorld(name);
-
-        if (world != null) {
-            for (Player p : world.getPlayers()) {
-                p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-            }
-            Bukkit.unloadWorld(world, false);
-        }
-
-        File folder = new File(Bukkit.getWorldContainer(), name);
-        if (!folder.exists()) return;
-
-        try {
-
-            Files.walk(folder.toPath())
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
 
     }
 

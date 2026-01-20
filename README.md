@@ -7,7 +7,7 @@
 
 ## Commands:
 ### Admin:
-- `/#setup` - Set up the server (does literally nothing currently)
+- `/#settings` - Formally `/#setup`, customize the plugin to your liking!
 - `/#arenas` - Add and manage arenas
 - `/#kits` - Add and manage kits
 ### Player:

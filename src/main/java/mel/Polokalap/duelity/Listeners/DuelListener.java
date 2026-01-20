@@ -465,6 +465,59 @@ public class DuelListener implements Listener {
                 player.teleport(blueSpawn);
                 opponent.teleport(redSpawn);
 
+                PlayerCache.canSkip.add(player);
+                PlayerCache.canSkip.add(opponent);
+
+                boolean[] instantStart = { false };
+
+                new BukkitRunnable() {
+
+                    int countdown = 5;
+
+                    @Override
+                    public void run() {
+
+                        if (countdown < 0) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            PlayerCache.canSkip.remove(player);
+                            PlayerCache.canSkip.remove(opponent);
+                            cancel();
+                            return;
+
+                        }
+
+                        if (!PlayerCache.canSkip.contains(player) || !PlayerCache.canSkip.contains(opponent)) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            Sound.Won(player);
+                            Sound.Won(opponent);
+                            cancel();
+                            return;
+
+                        }
+
+                        if (PlayerCache.skipped.contains(player) && PlayerCache.skipped.contains(opponent)) {
+
+                            player.sendActionBar(Component.empty());
+                            opponent.sendActionBar(Component.empty());
+                            instantStart[0] = true;
+                            cancel();
+                            return;
+
+                        }
+
+                        player.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+                        opponent.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(opponent) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+
+                        countdown--;
+
+                    }
+
+                }.runTaskTimer(plugin, 0L, 20L);
+
                 for (Player spectators : PlayerCache.spectating) {
 
                     if (!PlayerCache.spectatingPlayer.get(spectators).equals(player) && !PlayerCache.spectatingPlayer.get(spectators).equals(opponent)) return;
@@ -502,7 +555,7 @@ public class DuelListener implements Listener {
 
                         if (PlayerCache.duelEnd.get(player)) cancel();
 
-                        if (countdown <= 0) {
+                        if (countdown <= 0 || instantStart[0]) {
 
                             Title timerTitle = Title.title(
                                     Component.text(NewConfig.getString("duel.duel_start.title")),

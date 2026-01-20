@@ -38,6 +38,18 @@ public class LeaveCommand implements CommandExecutor, TabCompleter {
 
         }
 
+        if (PlayerCache.preInDuel.contains(player)) {
+
+            PlayerCache.preInDuel.remove(player);
+
+        }
+
+        if (PlayerCache.canSkip.contains(player)) {
+
+            PlayerCache.canSkip.remove(player);
+
+        }
+
         if (PlayerCache.spectating.contains(player)) {
 
             player.teleport(PlayerCache.spectatePreLocation.get(player));
