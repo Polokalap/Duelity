@@ -27,7 +27,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -420,6 +419,11 @@ public class DuelListener implements Listener {
 
                 player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
                 opponent.getActivePotionEffects().forEach(e -> opponent.removePotionEffect(e.getType()));
+
+                player.closeInventory();
+                player.getInventory().clear();
+                opponent.closeInventory();
+                opponent.getInventory().clear();
 
                 KitUtil.claimPlayerKit(kitName, player, player);
                 KitUtil.claimPlayerKit(kitName, opponent, opponent);
