@@ -126,15 +126,18 @@ public class GUIListener implements Listener {
 
             if (ItemUtil.PDCHelper("kits_add_name", item)) {
 
-                new AddKitGUI().openGUI(player);
                 PlayerCache.tempName.remove(player);
                 PlayerCache.tempIcon.remove(player);
                 PlayerCache.tempKit.remove(player);
-                PlayerCache.tempHp.remove(player);
-                PlayerCache.tempGamemode.remove(player);
                 PlayerCache.selectedArenas.remove(player);
                 PlayerCache.editingKit.remove(player);
                 GUIListener.addingKit.remove(player);
+
+                PlayerCache.tempHp.put(player, 20);
+                PlayerCache.tempGamemode.put(player, Gamemodes.SURVIVAL);
+                PlayerCache.tempRegen.put(player, true);
+
+                new AddKitGUI().openGUI(player);
 
             }
 
@@ -236,11 +239,16 @@ public class GUIListener implements Listener {
 
             }
 
-            if (ItemUtil.PDCHelper("kits_add_gui_next_arrow_name", item)) {
+            if (ItemUtil.PDCHelper("kits_add_gui_regen_name", item)) {
 
-                PlayerCache.tempHp.put(player, 20);
-                PlayerCache.tempGamemode.put(player, Gamemodes.SURVIVAL);
-                new AddKitAttributesGUI().openGUI(player);
+                Sound.Click(player);
+
+                PlayerCache.tempRegen.put(player, !PlayerCache.tempRegen.get(player));
+
+                item.setLore(List.of(NewConfig.getString("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+
+                if (PlayerCache.tempRegen.get(player)) item.setType(Material.COOKED_BEEF);
+                else item.setType(Material.ROTTEN_FLESH);
 
             }
 
@@ -250,7 +258,7 @@ public class GUIListener implements Listener {
 
                     if (PlayerCache.tempHp.get(player) <= 1 || event.isShiftClick() && PlayerCache.tempHp.get(player) <= 10) {
 
-                        player.sendMessage(NewConfig.getString("kits.add_gui.next.health.max"));
+                        player.sendMessage(NewConfig.getString("kits.add_gui.health.max"));
                         Sound.Error(player);
                         return;
 
@@ -268,7 +276,7 @@ public class GUIListener implements Listener {
 
                 }
 
-                String itemName = NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player)));
+                String itemName = NewConfig.getString("kits.add_gui.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player)));
 
                 ItemMeta itemMeta = item.getItemMeta();
 
@@ -328,8 +336,8 @@ public class GUIListener implements Listener {
                 ItemMeta itemMeta = item.getItemMeta();
 
                 itemMeta.setLore(List.of(
-                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
-                        NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                        NewConfig.getStringList("kits.add_gui.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                        NewConfig.getStringList("kits.add_gui.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
                 ));
 
                 item.setItemMeta(itemMeta);
@@ -386,10 +394,11 @@ public class GUIListener implements Listener {
                 ConfigurationSection kit = kitsSection.createSection(String.valueOf(number));
 
                 kit.set("name", PlayerCache.tempName.get(player));
-                kit.set("items", PlayerCache.tempKit.get(player));
                 kit.set("icon", PlayerCache.tempIcon.get(player).toString());
+                kit.set("items", PlayerCache.tempKit.get(player));
                 kit.set("health", PlayerCache.tempHp.get(player));
                 kit.set("gamemode", PlayerCache.tempGamemode.get(player).toString());
+                kit.set("regen", PlayerCache.tempRegen.get(player));
                 kit.set("arenas", PlayerCache.selectedArenas.get(player));
 
                 plugin.saveKitConfig();
@@ -398,7 +407,7 @@ public class GUIListener implements Listener {
 
             }
 
-            if (event.getView().getTitle().equals(NewConfig.getString("kits.add_gui.next.map.name"))) {
+            if (event.getView().getTitle().equals(NewConfig.getString("kits.add_gui.map.name"))) {
 
                 ConfigurationSection arenas = plugin.getArenaConfig().getConfigurationSection("arenas");
 
@@ -406,7 +415,6 @@ public class GUIListener implements Listener {
 
                     ConfigurationSection arena = arenas.getConfigurationSection(arenaId);
 
-//                    if (name.replaceAll(NewConfig.getString("arenas.arena.color"), "").equals(arena.get("name"))) {
                     if (ItemUtil.PDCHelper("arena-" + arena.get("name"), item)) {
 
                         Sound.Click(player);
@@ -461,7 +469,7 @@ public class GUIListener implements Listener {
 
             if (ItemUtil.PDCHelper("select_arena_add_kit_back_button", item)) {
 
-                new AddKitAttributesGUI().openGUI(player);
+                new AddKitGUI().openGUI(player);
 
             }
 
@@ -614,7 +622,6 @@ public class GUIListener implements Listener {
 
                     ConfigurationSection kit = kitsSection.getConfigurationSection(kitId);
 
-//                    if (name.replaceAll(NewConfig.getString("kits.kit.color"), "").equals(kit.get("name"))) {
                     if (ItemUtil.PDCHelper("kit-" + kit.get("name"), item)) {
 
                         Sound.Click(player);
@@ -623,6 +630,7 @@ public class GUIListener implements Listener {
 
                             PlayerCache.editingKit.put(player, (String) kit.get("name"));
                             PlayerCache.tempHp.put(player, kit.getInt("health"));
+                            PlayerCache.tempRegen.put(player, kit.getBoolean("regen"));
                             PlayerCache.inKitEditor.add(player);
                             new KitManagerEditGUI().openGUI(player);
 

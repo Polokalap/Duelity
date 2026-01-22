@@ -21,11 +21,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -651,6 +653,22 @@ public class DuelListener implements Listener {
         if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
 
         event.setCancelled(true);
+
+    }
+
+    @EventHandler
+    public void onRegen(EntityRegainHealthEvent event) {
+
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        if (!PlayerCache.inDuel.contains(player) && !PlayerCache.preInDuel.contains(player)) return;
+
+        ConfigurationSection kit = KitUtil.getItems(PlayerCache.duelKit.get(player));
+        boolean regen = kit.getBoolean("regen");
+
+        if (regen) return;
+
+        if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) event.setCancelled(true);
 
     }
 

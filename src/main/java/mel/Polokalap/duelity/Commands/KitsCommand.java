@@ -40,6 +40,7 @@ public class KitsCommand implements CommandExecutor, TabCompleter {
         PlayerCache.tempName.remove(player);
         PlayerCache.tempIcon.remove(player);
         PlayerCache.tempKit.remove(player);
+        PlayerCache.tempRegen.remove(player);
         PlayerCache.tempHp.remove(player);
         PlayerCache.tempGamemode.remove(player);
         PlayerCache.selectedArenas.remove(player);

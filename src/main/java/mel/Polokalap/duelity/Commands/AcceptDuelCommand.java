@@ -276,9 +276,6 @@ public class AcceptDuelCommand implements CommandExecutor, TabCompleter {
                             player.showTitle(timerTitle);
                             opponent.showTitle(timerTitle);
 
-                            PlayerCache.skipped.remove(player);
-                            PlayerCache.skipped.remove(opponent);
-
                             Sound.Ping(player);
                             Sound.Ping(opponent);
 

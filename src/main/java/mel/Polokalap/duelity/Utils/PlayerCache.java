@@ -16,6 +16,7 @@ public class PlayerCache {
 
     public static HashMap<Player, Integer> tempHp = new HashMap<>();
     public static HashMap<Player, Gamemodes> tempGamemode = new HashMap<>();
+    public static HashMap<Player, Boolean> tempRegen = new HashMap<>();
 
     public static HashMap<Player, Location> regP = new HashMap<>();
     public static HashMap<Player, Location> regS = new HashMap<>();
