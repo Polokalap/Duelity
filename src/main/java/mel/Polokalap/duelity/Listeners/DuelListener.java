@@ -471,6 +471,8 @@ public class DuelListener implements Listener {
                 player.teleport(blueSpawn);
                 opponent.teleport(redSpawn);
 
+                PlayerCache.skipped.remove(player);
+                PlayerCache.skipped.remove(opponent);
                 PlayerCache.canSkip.add(player);
                 PlayerCache.canSkip.add(opponent);
 
@@ -498,6 +500,8 @@ public class DuelListener implements Listener {
 
                             player.sendActionBar(Component.empty());
                             opponent.sendActionBar(Component.empty());
+                            PlayerCache.canSkip.remove(player);
+                            PlayerCache.canSkip.remove(opponent);
                             Sound.Won(player);
                             Sound.Won(opponent);
                             cancel();
@@ -509,6 +513,8 @@ public class DuelListener implements Listener {
 
                             player.sendActionBar(Component.empty());
                             opponent.sendActionBar(Component.empty());
+                            PlayerCache.canSkip.remove(player);
+                            PlayerCache.canSkip.remove(opponent);
                             instantStart[0] = true;
                             cancel();
                             return;
