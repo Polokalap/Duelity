@@ -115,7 +115,7 @@ public class AddKitGUI extends GUI {
 
         ItemUtil.assignPDC("kits_add_gui_regen_name", regenMeta);
 
-        regenMeta.setLore(List.of(NewConfig.getString("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+        regenMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
 
         regenItem.setItemMeta(regenMeta);
 

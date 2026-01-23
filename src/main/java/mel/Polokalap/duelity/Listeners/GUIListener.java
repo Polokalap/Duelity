@@ -245,7 +245,7 @@ public class GUIListener implements Listener {
 
                 PlayerCache.tempRegen.put(player, !PlayerCache.tempRegen.get(player));
 
-                item.setLore(List.of(NewConfig.getString("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+                item.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
 
                 if (PlayerCache.tempRegen.get(player)) item.setType(Material.COOKED_BEEF);
                 else item.setType(Material.ROTTEN_FLESH);

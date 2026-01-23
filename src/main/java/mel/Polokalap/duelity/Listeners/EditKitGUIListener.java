@@ -188,6 +188,7 @@ public class EditKitGUIListener implements Listener {
 
                 kit.set("items", master);
                 kit.set("health", PlayerCache.tempHp.get(player));
+                kit.set("regen", PlayerCache.tempRegen.get(player));
 
                 plugin.saveKitConfig();
 

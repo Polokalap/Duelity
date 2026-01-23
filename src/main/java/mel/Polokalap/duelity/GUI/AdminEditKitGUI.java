@@ -18,7 +18,7 @@ public class AdminEditKitGUI extends GUI {
     public void openGUI(Player player) {
 
         name = NewConfig.getString("editor.name");
-        size = 54;
+        size = 27;
 
         super.openGUI(player);
 
@@ -50,20 +50,7 @@ public class AdminEditKitGUI extends GUI {
 
         iconKit.setItemMeta(iconMeta);
 
-        menu.setItem(13, iconKit);
-
-        ItemStack deleteKit = new ItemStack(Material.BARRIER);
-        ItemMeta deleteMeta = deleteKit.getItemMeta();
-
-        deleteMeta.setDisplayName(NewConfig.getString("editor.edit.delete.name"));
-
-        ItemUtil.assignPDC("editor_edit_delete_name", deleteMeta);
-
-        deleteMeta.setLore(NewConfig.getStringList("editor.edit.delete.lore"));
-
-        deleteKit.setItemMeta(deleteMeta);
-
-        menu.setItem(16, deleteKit);
+        menu.setItem(11, iconKit);
 
         ItemStack healthKit = new ItemStack(Material.POTION);
         PotionMeta healthMeta = (PotionMeta) healthKit.getItemMeta();
@@ -78,7 +65,7 @@ public class AdminEditKitGUI extends GUI {
 
         healthKit.setItemMeta(healthMeta);
 
-        menu.setItem(37, healthKit);
+        menu.setItem(12, healthKit);
 
         ItemStack gamemodeItem = new ItemStack(Material.JIGSAW);
         ItemMeta gamemodeMeta = gamemodeItem.getItemMeta();
@@ -94,7 +81,7 @@ public class AdminEditKitGUI extends GUI {
 
         gamemodeItem.setItemMeta(gamemodeMeta);
 
-        menu.setItem(40, gamemodeItem);
+        menu.setItem(13, gamemodeItem);
 
         PlayerCache.selectedArenas.put(player, (ArrayList<String>) kit.getList("arenas"));
 
@@ -109,7 +96,35 @@ public class AdminEditKitGUI extends GUI {
 
         mapKit.setItemMeta(mapMeta);
 
-        menu.setItem(43, mapKit);
+        menu.setItem(14, mapKit);
+
+        ItemStack regenItem;
+        if (PlayerCache.tempRegen.get(player)) regenItem = new ItemStack(Material.COOKED_BEEF);
+        else regenItem = new ItemStack(Material.ROTTEN_FLESH);
+        ItemMeta regenMeta = regenItem.getItemMeta();
+
+        regenMeta.setDisplayName(NewConfig.getString("kits.add_gui.regen.name"));
+
+        ItemUtil.assignPDC("kits_add_gui_regen_name", regenMeta);
+
+        regenMeta.setLore(List.of(NewConfig.getStringCompiled("kits.add_gui.regen.lore").replaceAll("ẞanswer", PlayerCache.tempRegen.get(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+
+        regenItem.setItemMeta(regenMeta);
+
+        menu.setItem(15, regenItem);
+
+        ItemStack deleteKit = new ItemStack(Material.BARRIER);
+        ItemMeta deleteMeta = deleteKit.getItemMeta();
+
+        deleteMeta.setDisplayName(NewConfig.getString("editor.edit.delete.name"));
+
+        ItemUtil.assignPDC("editor_edit_delete_name", deleteMeta);
+
+        deleteMeta.setLore(NewConfig.getStringList("editor.edit.delete.lore"));
+
+        deleteKit.setItemMeta(deleteMeta);
+
+        menu.setItem(16, deleteKit);
 
         ItemStack backButton = new ItemStack(Material.ARROW);
         ItemMeta backMeta = backButton.getItemMeta();
@@ -120,7 +135,7 @@ public class AdminEditKitGUI extends GUI {
 
         backButton.setItemMeta(backMeta);
 
-        menu.setItem(53, backButton);
+        menu.setItem(26, backButton);
 
     }
 
