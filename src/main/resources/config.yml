@@ -248,6 +248,10 @@ duel:
   duel_start:
     title: " "
     subtitle: "&eGood luck!"
+  no_kits:
+    name: "&4There are no kits on the server!"
+    lore:
+      - "&cCreate one using /#kits!"
   round_message:
     - "&8&l----------------------------------------"
     - "&7(&9%blue_score% &8- &c%red_score%&7) &8%player% &7won the duel!"

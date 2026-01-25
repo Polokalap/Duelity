@@ -38,7 +38,7 @@ public class PlayerStateListener implements Listener {
 
         }
 
-        if (playerSettings.getBoolean("spectators")) {
+        if (!playerSettings.contains("spectators")) {
 
             playerSettings.set("spectators", true);
 
