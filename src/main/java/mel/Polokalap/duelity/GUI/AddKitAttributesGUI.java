@@ -24,7 +24,7 @@ public class AddKitAttributesGUI extends GUI {
     @Override
     public void openGUI(Player player) {
 
-        name = NewConfig.getString("kits.add_gui.next.name");
+        name = NewConfig.getString("kits.add_gui.name");
         size = 27;
 
         super.openGUI(player);
@@ -34,11 +34,11 @@ public class AddKitAttributesGUI extends GUI {
 
         healthMeta.setColor(Color.fromRGB(230, 10, 10));
 
-        healthMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player))));
+        healthMeta.setDisplayName(NewConfig.getString("kits.add_gui.health.name").replaceAll("ẞhp", String.valueOf(PlayerCache.tempHp.get(player))));
 
         ItemUtil.assignPDC("kits_add_gui_next_health_name", healthMeta);
 
-        healthMeta.setLore(NewConfig.getStringList("kits.add_gui.next.health.lore"));
+        healthMeta.setLore(NewConfig.getStringList("kits.add_gui.health.lore"));
 
         healthItem.setItemMeta(healthMeta);
 
@@ -47,13 +47,13 @@ public class AddKitAttributesGUI extends GUI {
         ItemStack gamemodeItem = new ItemStack(Material.JIGSAW);
         ItemMeta gamemodeMeta = gamemodeItem.getItemMeta();
 
-        gamemodeMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.gamemode.name"));
+        gamemodeMeta.setDisplayName(NewConfig.getString("kits.add_gui.gamemode.name"));
 
         ItemUtil.assignPDC("kits_add_gui_next_gamemode_name", gamemodeMeta);
 
         gamemodeMeta.setLore(List.of(
-                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
-                NewConfig.getStringList("kits.add_gui.next.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
+                NewConfig.getStringList("kits.add_gui.gamemode.lore").get(0).replaceAll("ẞa", PlayerCache.tempGamemode.get(player) == Gamemodes.SURVIVAL ? "§a§u" : "§7"),
+                NewConfig.getStringList("kits.add_gui.gamemode.lore").get(1).replaceAll("ẞb", PlayerCache.tempGamemode.get(player) == Gamemodes.ADVENTURE ? "§a§u" : "§7")
         ));
 
         gamemodeItem.setItemMeta(gamemodeMeta);
@@ -64,11 +64,11 @@ public class AddKitAttributesGUI extends GUI {
 
         ItemMeta mapMeta = mapItem.getItemMeta();
 
-        mapMeta.setDisplayName(NewConfig.getString("kits.add_gui.next.map.name"));
+        mapMeta.setDisplayName(NewConfig.getString("kits.add_gui.map.name"));
 
         ItemUtil.assignPDC("kits_add_gui_next_map_name", mapMeta);
 
-        mapMeta.setLore(NewConfig.getStringList("kits.add_gui.next.map.lore"));
+        mapMeta.setLore(NewConfig.getStringList("kits.add_gui.map.lore"));
 
         mapItem.setItemMeta(mapMeta);
 

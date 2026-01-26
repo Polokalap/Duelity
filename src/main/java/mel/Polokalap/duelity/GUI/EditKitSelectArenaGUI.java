@@ -17,7 +17,7 @@ public class EditKitSelectArenaGUI extends GUI {
     @Override
     public void openGUI(Player player) {
 
-        name = NewConfig.getString("kits.add_gui.next.map.name");
+        name = NewConfig.getString("kits.add_gui.map.name");
         size = 54;
 
         super.openGUI(player);
