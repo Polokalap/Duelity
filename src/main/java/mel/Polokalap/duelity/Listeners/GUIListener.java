@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -790,12 +791,20 @@ public class GUIListener implements Listener {
 
                     ArrayList<ItemStack> items = new ArrayList<>();
 
-                    for (ItemStack item : player.getInventory()) {
+                    PlayerInventory inv = player.getInventory();
+
+                    for (ItemStack item : inv.getStorageContents()) {
 
                         if (item != null) items.add(item);
                         else items.add(new ItemStack(Material.AIR));
 
                     }
+
+                    items.add(inv.getBoots());
+                    items.add(inv.getLeggings());
+                    items.add(inv.getChestplate());
+                    items.add(inv.getHelmet());
+                    items.add(inv.getItemInOffHand());
 
                     PlayerCache.tempKit.put(player, items);
 

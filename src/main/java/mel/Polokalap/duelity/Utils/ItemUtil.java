@@ -48,9 +48,7 @@ public class ItemUtil {
 
         for (NamespacedKey key : pdc.getKeys()) {
 
-            if (key.getNamespace().equals("duelity") &&
-
-                    key.getKey().startsWith("player_kit_editor_item")) {
+            if (key.getNamespace().equals("duelity") && key.getKey().startsWith("player_kit_editor_item")) {
 
                 return key;
 
