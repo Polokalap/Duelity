@@ -24,6 +24,8 @@ public class PlayerManager {
 
         if (config.getBoolean("settings.duel_server")) {
 
+            if (config.getLocation("settings.spawn") == null) return;
+
             player.teleport(config.getLocation("settings.spawn"));
 
         }

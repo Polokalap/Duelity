@@ -73,6 +73,11 @@ public class KitEditorManager {
             ItemStack boots = inv.getItem(3);
             ItemStack offhand = inv.getItem(5);
 
+            if (ItemUtil.PDCHelper("temp_helmet", helmet)) helmet = new ItemStack(Material.AIR);
+            if (ItemUtil.PDCHelper("temp_chestplate", chestplate)) chestplate = new ItemStack(Material.AIR);
+            if (ItemUtil.PDCHelper("temp_leggings", leggings)) leggings = new ItemStack(Material.AIR);
+            if (ItemUtil.PDCHelper("temp_boots", boots)) boots = new ItemStack(Material.AIR);
+
             ArrayList<ItemStack> hotbar = new ArrayList<>();
             ArrayList<ItemStack> rest = new ArrayList<>();
 

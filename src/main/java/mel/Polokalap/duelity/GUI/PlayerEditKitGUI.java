@@ -146,6 +146,54 @@ public class PlayerEditKitGUI extends GUI {
             offhand.setItemMeta(offhandMeta);
         }
 
+        if (helmet.getType().equals(Material.AIR)) {
+
+            helmet = new ItemStack(Material.CHAINMAIL_HELMET);
+
+            helmetMeta = helmet.getItemMeta();
+            helmetMeta.setHideTooltip(true);
+            ItemUtil.assignPDC("temp_helmet", helmetMeta);
+
+            helmet.setItemMeta(helmetMeta);
+
+        }
+
+        if (chestplate.getType().equals(Material.AIR)) {
+
+            chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+
+            chestplateMeta = chestplate.getItemMeta();
+            chestplateMeta.setHideTooltip(true);
+            ItemUtil.assignPDC("temp_chestplate", chestplateMeta);
+
+            chestplate.setItemMeta(chestplateMeta);
+
+        }
+
+        if (leggings.getType().equals(Material.AIR)) {
+
+            leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+
+            leggingsMeta = leggings.getItemMeta();
+            leggingsMeta.setHideTooltip(true);
+            ItemUtil.assignPDC("temp_leggings", leggingsMeta);
+
+            leggings.setItemMeta(leggingsMeta);
+
+        }
+
+        if (boots.getType().equals(Material.AIR)) {
+
+            boots = new ItemStack(Material.CHAINMAIL_BOOTS);
+
+            bootsMeta = boots.getItemMeta();
+            bootsMeta.setHideTooltip(true);
+            ItemUtil.assignPDC("temp_boots", bootsMeta);
+
+            boots.setItemMeta(bootsMeta);
+
+        }
+
         menu.setItem(0, helmet);
         menu.setItem(1, chestplate);
         menu.setItem(2, leggings);

@@ -2,6 +2,7 @@ package mel.Polokalap.duelity.Commands;
 
 import mel.Polokalap.duelity.GUI.ArenaManagerGUI;
 import mel.Polokalap.duelity.Main;
+import mel.Polokalap.duelity.Utils.ItemUtil;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
@@ -134,6 +135,8 @@ public class ArenasCommand implements CommandExecutor, TabCompleter {
                             ItemStack wand = new ItemStack(Material.IRON_SHOVEL);
 
                             ItemMeta wandMeta = wand.getItemMeta();
+
+                            ItemUtil.assignPDC("arena_wand", wandMeta);
 
                             wandMeta.setDisplayName(NewConfig.getString("arenas.wand.name"));
                             wandMeta.setLore(NewConfig.getStringList("arenas.wand.lore"));
