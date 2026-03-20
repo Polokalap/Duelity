@@ -2,10 +2,7 @@ package mel.Polokalap.duelity.Listeners;
 
 import mel.Polokalap.duelity.Main;
 import mel.Polokalap.duelity.Managers.PlayerManager;
-import mel.Polokalap.duelity.Utils.NewConfig;
-import mel.Polokalap.duelity.Utils.PlayerCache;
-import mel.Polokalap.duelity.Utils.Sound;
-import mel.Polokalap.duelity.Utils.Teams;
+import mel.Polokalap.duelity.Utils.*;
 import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -63,11 +60,17 @@ public class PlayerStateListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (PlayerCache.canSkip.contains(player) && !PlayerCache.skipped.contains(player)) {
+        Duel duel = PlayerCache.playerDuel.get(player);
 
-            Player opponent = PlayerCache.duelOpponent.get(player);
+        if (duel == null) return;
 
-            PlayerCache.skipped.add(player);
+        if (duel.canSkip()) {
+
+            if (duel.hasSkipped(player)) return;
+
+            Player opponent = duel.getOpponent(player);
+
+            duel.skip(player);
 
             Sound.Ping(player);
             Sound.Ping(opponent);
@@ -75,8 +78,8 @@ public class PlayerStateListener implements Listener {
             player.sendMessage((PlayerCache.duelTeams.get(player) == Teams.BLUE ? "§9" : "§c") + NewConfig.getString("duel.skipped").replaceAll("ẞplayer", player.getName()));
             opponent.sendMessage((PlayerCache.duelTeams.get(player) == Teams.BLUE ? "§9" : "§c") + NewConfig.getString("duel.skipped").replaceAll("ẞplayer", player.getName()));
 
-            player.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
-            opponent.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", PlayerCache.skipped.contains(opponent) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+            player.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", duel.hasSkipped(player) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
+            opponent.sendActionBar(Component.text(NewConfig.getString("duel.skip").replaceAll("ẞstatus", duel.hasSkipped(opponent) ? NewConfig.getString("player.on") : NewConfig.getString("player.off"))));
 
         }
 

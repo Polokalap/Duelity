@@ -1,6 +1,7 @@
 package mel.Polokalap.duelity.Managers;
 
 import mel.Polokalap.duelity.Main;
+import mel.Polokalap.duelity.Utils.Duel;
 import mel.Polokalap.duelity.Utils.NewConfig;
 import mel.Polokalap.duelity.Utils.PlayerCache;
 import mel.Polokalap.duelity.Utils.Sound;
@@ -23,6 +24,16 @@ public class DuelManager {
     private static Main plugin = Main.getInstance();
 
     public static void join(Player player) {
+
+        Duel duel = PlayerCache.playerDuel.get(player);
+
+        if (duel != null) {
+
+            PlayerCache.playerDuel.remove(player);
+            PlayerCache.duelRequests.remove(player);
+            PlayerCache.duels.remove(duel);
+
+        }
 
         PlayerCache.duelEnd.put(player, false);
         PlayerCache.duelPreGameMode.put(player, player.getGameMode());
@@ -49,11 +60,21 @@ public class DuelManager {
 
     public static void leave(Player player, boolean direct, boolean instant) {
 
+        PlayerCache.duelEnd.put(player, true);
+
         player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
 
-        PlayerCache.duelTeams.remove(player);
         player.setMaxHealth(20.0d);
-        PlayerCache.duelEnd.put(player, true);
+
+        Duel duel = PlayerCache.playerDuel.get(player);
+
+        if (duel != null) {
+
+            PlayerCache.playerDuel.remove(player);
+            PlayerCache.duelRequests.remove(player);
+            PlayerCache.duels.remove(duel);
+
+        }
 
         if (instant) {
 
@@ -72,6 +93,7 @@ public class DuelManager {
         Iterator<Player> iterator = PlayerCache.spectating.iterator();
 
         while (iterator.hasNext()) {
+
             Player spectator = iterator.next();
             Player spectatingTarget = PlayerCache.spectatingPlayer.get(spectator);
 
@@ -95,7 +117,7 @@ public class DuelManager {
 
         player.getInventory().clear();
 
-        Player opponent = PlayerCache.duelOpponent.get(player);
+        Player opponent = PlayerCache.playerDuel.get(player).getOpponent(player);
 
         Title indirectTitle = Title.title(
                 Component.text(NewConfig.getString("duel.left.title").replaceAll("%player%", opponent.getName())),
@@ -147,6 +169,7 @@ public class DuelManager {
         Iterator<Player> iterator = PlayerCache.spectating.iterator();
 
         while (iterator.hasNext()) {
+
             Player spectator = iterator.next();
             Player spectatingTarget = PlayerCache.spectatingPlayer.get(spectator);
 

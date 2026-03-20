@@ -57,6 +57,9 @@ public class PlayerCache {
     public static HashMap<Player, String> duelKit = new HashMap<>();
     public static HashMap<Player, Boolean> duelEnd = new HashMap<>();
 
+    public static ArrayList<Duel> duels = new ArrayList<>();
+    public static HashMap<Player, Duel> playerDuel = new HashMap<>();
+
     public static ArrayList<Player> spectating = new ArrayList<>();
     public static HashMap<Player, Player> spectatingPlayer = new HashMap<>();
     public static HashMap<Player, Location> spectatePreLocation = new HashMap<>();
